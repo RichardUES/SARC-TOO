@@ -1,0 +1,208 @@
+@import "../config/variables.css";
+
+/* Estilos para páginas de error */
+.error-page-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(135deg, var(--bg-color) 0%, #2D4A8A 50%, var(--main-color) 100%);
+    margin: -2rem -2rem 0 -2rem;
+    padding: 2rem;
+    overflow: hidden;
+}
+
+.error-content {
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+}
+
+.error-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    border-radius: 50%;
+    background: rgb(177, 247, 253);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(177, 247, 253, 0.3);
+    color: var(--main-color);
+    animation: float 3s ease-in-out infinite;
+}
+
+.error-404-icon {
+    animation: bounce 2s infinite;
+}
+
+.error-401-icon {
+    animation: shake 0.5s infinite;
+}
+
+.error-500-icon {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.error-code {
+    font-size: clamp(4rem, 15vw, 8rem);
+    font-weight: 900;
+    color: var(--main-color);
+    text-shadow: 0 0 30px rgba(177, 247, 253, 0.5);
+    margin-bottom: 1rem;
+    animation: glow 2s ease-in-out infinite alternate;
+    position: relative;
+    line-height: 1;
+}
+
+.error-code::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #1F2E64;
+    z-index: -1;
+    transform: translate(3px, 3px);
+    opacity: 0.3;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(177, 247, 253, 0.5); }
+    to { text-shadow: 0 0 40px rgba(177, 247, 253, 0.8); }
+}
+
+.error-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.error-message {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #B1F7FD, #87E8F0);
+    color: #1F2E64;
+    box-shadow: 0 4px 15px rgba(177, 247, 253, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(177, 247, 253, 0.4);
+    background: linear-gradient(45deg, #87E8F0, #B1F7FD);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #B1F7FD;
+    color: #B1F7FD;
+}
+
+.btn-secondary:hover {
+    background: rgba(177, 247, 253, 0.1);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.particles-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particles-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+            radial-gradient(2px 2px at 20px 30px, rgba(177, 247, 253, 0.3), transparent),
+            radial-gradient(2px 2px at 40px 70px, rgba(177, 247, 253, 0.2), transparent),
+            radial-gradient(1px 1px at 90px 40px, rgba(177, 247, 253, 0.4), transparent),
+            radial-gradient(1px 1px at 130px 80px, rgba(177, 247, 253, 0.3), transparent);
+    background-repeat: repeat;
+    background-size: 200px 150px;
+    animation: particles-move 20s linear infinite;
+}
+
+@keyframes particles-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-200px, -150px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .error-page-container {
+        margin: -1rem -1rem 0 -1rem;
+        padding: 1rem;
+    }
+
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 200px;
+    }
+}

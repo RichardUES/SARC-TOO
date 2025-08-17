@@ -1,0 +1,69 @@
+
+<?php
+/* ==================================================
+   resources/views/home/contact.php - Vista de Contacto
+   ================================================== */
+
+// Iniciar captura de contenido
+ob_start();
+?>
+
+<div class="contact-section">
+  <div class="container">
+    <h1><?= htmlspecialchars($title) ?></h1>
+
+    <?php if (isset($success)): ?>
+      <div class="alert alert-success">
+        <?= htmlspecialchars($success) ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if (isset($error)): ?>
+      <div class="alert alert-error">
+        <?= htmlspecialchars($error) ?>
+      </div>
+    <?php endif; ?>
+
+    <form method="POST" action="/home/contact" class="contact-form">
+      <div class="form-group">
+        <label for="name">Nombre:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<?= htmlspecialchars($old_data['name'] ?? '') ?>"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="<?= htmlspecialchars($old_data['email'] ?? '') ?>"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="message">Mensaje:</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="5"
+          required
+        ><?= htmlspecialchars($old_data['message'] ?? '') ?></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+    </form>
+  </div>
+</div>
+
+<?php
+// Capturar el contenido y pasarlo al layout
+$content = ob_get_clean();
+require_once RESOURCES_PATH . '/views/layouts/base.php';
+?>

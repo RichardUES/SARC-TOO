@@ -1,0 +1,30 @@
+USE ENERGYSUN_ECOMMERCE;
+
+-- ++++++++++++++++++++++++++++++ INSERCIONES INICIALES DE LA BASE DE DATOS ++++++++++++++++++++++++
+
+INSERT INTO ROLES(ROL_NOMBRE, ROL_FECHA_REGISTRO, ROL_FUM)
+VALUES ('ADMINISTRADOR', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       ('VISITADOR', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       ('CLIENTE', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
+-- ROL: administrador
+-- EMAIL: mrpineda@mail.com
+-- PASSWORD: mrpineda
+INSERT INTO USUARIOS(USU_ROL_ID, USU_USERNAME, USU_EMAIL, USU_CLAVE, USU_FECHA_REGISTRO, USU_FUM)
+VALUES (1,
+        'mrpineda',
+        'mrpineda@mail.com',
+        '$2y$04$eBF/pYCEjuwIWhkO8GMBQuIlprKCsUwmi8ImdCVFrjfkKz7E4jAfm',
+        CURRENT_TIMESTAMP(),
+        CURRENT_TIMESTAMP());
+
+-- ROL: administrador
+-- EMAIL: admin@mail.com
+-- PASSWORD: admin
+INSERT INTO USUARIOS(USU_ROL_ID, USU_USERNAME, USU_EMAIL, USU_CLAVE, USU_FECHA_REGISTRO, USU_FUM)
+VALUES (1,
+        'admin',
+        'admin@mail.com',
+        '$2y$04$bc.6VSQX9tARU98JAyNV4.2Fs2LP9BOCqYD2INqsW/I2VfghkP2pu',
+        CURRENT_TIMESTAMP(),
+        CURRENT_TIMESTAMP());

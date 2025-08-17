@@ -1,0 +1,22 @@
+{
+  "name": "sarc_project/sarc",
+  "description": "Proyecto universitario de semetre, para lka elboracion de un Sistema de Atención y Resolución de Clientes ",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Ricardo Pineda"
+    }
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
+  },
+
+  "require": {
+    "ext-pdo": "*"
+  }
+}
