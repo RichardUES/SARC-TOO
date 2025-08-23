@@ -7,6 +7,34 @@
 ob_start();
 ?>
 
+<!-- Hero About Section -->
+<section class="hero-about d-flex align-items-center position-relative mb-lg-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-2 fw-bold text-white mb-4">
+          <span class="neon-glow">Contáctanos</span>
+        </h1>
+        <p class="lead text-primary fs-3 mb-4">
+          <em>"Hacemos que el mundo brille."</em>
+        </p>
+        <p class="fs-5 text-light">
+          Desde 2008, Luz El Faro ha sido el faro que guía el desarrollo
+          energético de El Salvador, conectando sueños y alimentando el progreso
+          de nuestro país con energía confiable y eficiente.
+        </p>
+      </div>
+      <div class="col-lg-6 text-center">
+        <div class="floating-slow">
+          <img src="<?= VIRTUAL_PATH ?>/assets/images/contact-banner.svg"
+               alt="Contactar a Luz El Faro" class="img-fluid rounded-4 neon-border">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <div class="container">
 
   <h1 class="text-center"><?= htmlspecialchars($title) ?></h1>

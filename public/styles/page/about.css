@@ -1,0 +1,99 @@
+.neon-glow {
+  text-shadow: 0 0 5px var(--bs-primary), 0 0 10px var(--bs-primary), 0 0 15px var(--bs-primary);
+}
+
+.neon-border {
+  border: 2px solid var(--bs-primary);
+  box-shadow: 0 0 10px var(--bs-primary), inset 0 0 10px rgba(177, 247, 253, 0.1);
+}
+
+.hero-about {
+  background: linear-gradient(135deg, var(--bs-secondary) 0%, #0d1426 100%);
+  min-height: 60vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(177, 247, 253, 0.1) 0%, transparent 50%);
+}
+
+.timeline-item {
+  background: rgba(31, 46, 100, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(177, 247, 253, 0.2);
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover {
+  border-color: var(--bs-primary);
+  box-shadow: 0 5px 20px rgba(177, 247, 253, 0.3);
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(177, 247, 253, 0.1);
+  transition: all 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(177, 247, 253, 0.2);
+  border-color: var(--bs-primary);
+}
+
+.values-section {
+  background: linear-gradient(45deg, #0d1426 0%, var(--bs-secondary) 100%);
+}
+
+.value-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--bs-primary), #00CFE8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--bs-secondary);
+  margin: 0 auto 1rem;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.floating-slow {
+  animation: floating-slow 4s ease-in-out infinite;
+}
+
+@keyframes floating-slow {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

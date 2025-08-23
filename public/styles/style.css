@@ -5,5 +5,7 @@
 @import "config/variables.css";
 @import "config/init.css";
 @import "page/error-page.css";
+@import "page/home.css";
+@import "page/about.css";
 
 
