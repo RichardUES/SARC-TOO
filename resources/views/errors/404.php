@@ -21,8 +21,8 @@ ob_start();
       Puede que haya sido movida, eliminada o simplemente esté jugando al escondite.
     </p>
     <div class="error-actions">
-      <a href="/" class="btn btn-primary">Volver al Inicio</a>
-      <a href="javascript:history.back()" class="btn btn-secondary">Ir Atrás</a>
+      <a href="/" class="button button-primary">Volver al Inicio</a>
+      <a href="javascript:history.back()" class="button button-secondary">Ir Atrás</a>
     </div>
   </div>
   <div class="particles-bg"></div>

@@ -17,6 +17,7 @@ define('PUBLIC_PATH', __DIR__);
 //echo "public_path: ".PUBLIC_PATH."<br>";
 define('RESOURCES_PATH', BASE_PATH . '/resources');
 //echo "RESOURCES_path: ".RESOURCES_PATH."<br>";
+define("VIRTUAL_PATH", "http://luzelfaro.com");
 
 // Autoload con Composer PSR-4
 require_once BASE_PATH . '/vendor/autoload.php';

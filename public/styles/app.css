@@ -1,3 +1,7 @@
 /* ===================================================== */
 /* ==== ESTILOS DEL PANEL ADMINISTRATIVO (DASHBOARD) === */
 /* ===================================================== */
+@import "./bootstrap/style.css";
+@import "./config/variables.css";
+@import "./config/init.css";
+

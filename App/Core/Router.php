@@ -102,7 +102,7 @@ class Router
       require_once $controllerPath;
 
       // Construir nombre completo con namespace
-      $controllerClass = "App\\Modules\\{$this->getModuleName()}\\Controllers\\{$this->controller}";
+      $controllerClass = "App\\Modules\\{$this->getModuleName()}\\{$this->controller}";
 
       // Verificar si existe la clase
       if (!class_exists($controllerClass)) {
@@ -131,7 +131,7 @@ class Router
   private function getControllerPath()
   {
     $moduleName = $this->getModuleName();
-    return APP_PATH . "/Modules/{$moduleName}/Controllers/{$this->controller}.php";
+    return APP_PATH . "/Modules/{$moduleName}/{$this->controller}.php";
   }
 
   /**

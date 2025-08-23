@@ -49,7 +49,4 @@ class Database
     return $this->con;
   }
 
-
-
-
 }

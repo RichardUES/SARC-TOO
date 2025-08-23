@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules\Auth\Controllers;
+namespace App\Modules\Auth;
 
 use App\Core\Controller;
-use App\Modules\Auth\Repositories\AuthRepository;
 
 class AuthController extends Controller
 {
@@ -17,6 +16,10 @@ class AuthController extends Controller
 
     $this->view("auth/login");
 
+  }
+
+  public function login(){
+    echo "Te estas logueando";
   }
 
 }

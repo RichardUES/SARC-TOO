@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Home\Controllers;
+namespace App\Modules\Home;
 
 use App\Core\Controller;
 
@@ -14,18 +14,7 @@ class HomeController extends Controller
   {
     // Datos que queremos pasar a la vista
     $data = [
-      'title' => 'Bienvenido al Sistema',
-      'user_name' => 'Richard',
-      'stats' => [
-        'total_users' => 150,
-        'total_products' => 45,
-        'total_orders' => 320
-      ],
-      'recent_activities' => [
-        'Usuario Juan se registró',
-        'Producto "Laptop Dell" agregado',
-        'Orden #1234 completada'
-      ]
+      'title' => 'Luz el Faro',
     ];
 
     // Cargar la vista usando el método heredado
@@ -41,32 +30,14 @@ class HomeController extends Controller
     $data = [
       'title' => 'Acerca de Nosotros',
       'company_info' => [
-        'name' => 'Mi Empresa',
-        'founded' => '2020',
-        'employees' => 25,
+        'name' => 'Luz el Faro',
+        'founded' => '2025',
+        'employees' => 4,
         'mission' => 'Crear soluciones innovadoras para nuestros clientes'
       ]
     ];
 
     $this->view('about', $data);
-  }
-
-  /**
-   * API endpoint para obtener estadísticas
-   * URL: /home/stats (para AJAX)
-   */
-  public function stats()
-  {
-    // Simular datos de base de datos
-    $stats = [
-      'users' => 150,
-      'products' => 45,
-      'orders' => 320,
-      'revenue' => 25000
-    ];
-
-    // Devolver como JSON usando el método heredado
-    $this->json($stats);
   }
 
   /**
@@ -106,13 +77,4 @@ class HomeController extends Controller
     $this->view('contact', $data);
   }
 
-  /**
-   * Redirigir a dashboard (ejemplo de redirect)
-   * URL: /home/dashboard
-   */
-  public function dashboard()
-  {
-    // Usar el método redirect heredado
-    $this->redirect('dashboard');
-  }
 }

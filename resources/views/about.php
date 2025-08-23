@@ -19,7 +19,7 @@ ob_start();
       </div>
 
       <div class="team-section">
-        <h3>Nuestro Equipo</h3>
+        <h3>Nuestro Equipo <i class="bi bi-alarm" style="font-size: 2rem;"></i></h3>
         <p>Contamos con un equipo de profesionales dedicados a brindar las mejores soluciones.</p>
       </div>
     </div>

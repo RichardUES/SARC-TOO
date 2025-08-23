@@ -20,8 +20,8 @@ ob_start();
             y está trabajando para resolver el problema. Inténtalo de nuevo en unos minutos.
         </p>
         <div class="error-actions">
-            <a href="javascript:location.reload()" class="btn btn-primary">Reintentar</a>
-            <a href="/" class="btn btn-secondary">Volver al Inicio</a>
+            <a href="javascript:location.reload()" class="button button-primary">Reintentar</a>
+            <a href="/" class="button button-secondary">Volver al Inicio</a>
         </div>
     </div>
     <div class="particles-bg"></div>

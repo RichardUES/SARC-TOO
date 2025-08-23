@@ -1,0 +1,40 @@
+@font-face {
+    font-family: "Lato", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    src: url("/public/assets/fonts/Lato-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Lato-bold", sans-serif;
+    font-weight: 700;
+    src: url("/public/assets/fonts/Lato-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    src: url("/public/assets/fonts/Raleway-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Raleway-bold", sans-serif;
+    font-weight: 700;
+    src: url("/public/assets/fonts/Raleway-Bold.ttf") format("truetype");
+}
+
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*html { font-size: 62.5%; }*/
+
+body {
+    font-family: var(--main-font);
+}
+
+
+
+
