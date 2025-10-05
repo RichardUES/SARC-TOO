@@ -2,6 +2,133 @@
 /* ==== ESTILOS DEL PANEL ADMINISTRATIVO (DASHBOARD) === */
 /* ===================================================== */
 @import "./bootstrap/style.css";
+@import "./bs-icons.css";
 @import "./config/variables.css";
 @import "./config/init.css";
 
+
+body {
+  min-height: 100vh;
+  max-height: 100vh;
+  display: grid;
+  grid-template-columns: 300px repeat(3, 1fr) ;
+  grid-template-rows: 70px repeat(3, 1fr) ;
+  grid-template-areas:
+    "sidebar header header header"
+    "sidebar main main main"
+    "sidebar main main main"
+    "sidebar main main main"
+  ;
+
+  transition: grid-template-columns 200ms ease-in-out;
+}
+
+
+.header{
+  grid-area: header;
+  background-color: #fff;
+}
+
+.main{
+  grid-area: main;
+  background-color: #0d6efd;
+  overflow-y: scroll;
+}
+
+.sidebar{
+  display: grid;
+  grid-template-rows: 70px 1fr 40px;
+  grid-area: sidebar;
+  background-color: var(--bs-secondary);
+}
+
+.sidebar .brand {
+  /*border:solid;*/
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: var(--bs-primary);
+  font-family: var(--title-font), sans-serif;
+
+  img {
+    width: 40px;
+  }
+
+}
+
+.sidebar_menu, .sidebar_menu > .menu {
+  height: 100%;
+}
+
+.sidebar_menu .menu{
+  /*border: solid red;*/
+  list-style: none;
+  padding: 10px;
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*justify-content: center;*/
+}
+
+.sidebar_menu .menu__item {
+  position: relative;
+  margin: 15px 0;
+}
+
+.sidebar_menu .menu__item::before {
+  content: "";
+  display: block;
+  background-image: var(--gradient-morning-sky);
+  /*background-color: rgba(var(--bs-primary-rgb), 0.5);*/
+  width: 90%;
+  height: 3px;
+
+  position: absolute;
+  bottom:0;
+  left: 50%;
+  transform: translateX(-50%);
+
+}
+
+.sidebar_menu .menu__link {
+  display: inline-block;
+  width: 100%;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  transition: background-color 0.2s linear,
+              color 0.2s linear;
+
+  i { font-size: 18px; }
+
+  .text { margin-left: 12px; }
+
+}
+
+.sidebar_menu .menu__link:hover {
+  background-color: var(--bs-primary);
+  color: var(--bs-secondary);
+}
+
+.sidebar_menu .menu__link--active {
+  background-color: var(--bs-primary);
+  color: var(--bs-secondary);
+}
+
+
+
+.footer {
+  width: auto;
+  cursor: pointer;
+  padding: 5px 10px 0 20px;
+  color: var(--bs-primary);
+  border-top: 1px solid;
+  box-sizing: border-box;
+
+
+  i {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+}

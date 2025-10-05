@@ -7,7 +7,7 @@ use PDOException;
 class Database
 {
 
-  private $con;
+  private PDO $con;
 
   public function __construct()
   {
@@ -30,7 +30,7 @@ class Database
       // Deshabilitar autocommit
       $this->con->setAttribute(PDO::ATTR_AUTOCOMMIT, false);
 
-      echo 'conexion campeon';
+      //echo 'conexion campeon';
 
     } catch (PDOException $exc) {
 

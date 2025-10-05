@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Models;
+use App\Models\enums\Status;
 use DateTime;
 
 class Rol
 {
-  public function __construct(
-    private string   $codigo,
-    private string   $nombre,
-    private DateTime $fecha_registro,
-    private DateTime $fum,
-    private string   $estado
-  ) { }
+
+  private string $codigo;
+  private string $nombre;
+  private DateTime $fecha_registro;
+  private DateTime $fum;
+  private Status $estado;
+
+  public function __construct() { }
 
   public function __get($name)
   {
@@ -44,7 +46,7 @@ class Rol
     $this->fecha_registro = $fecha_registro;
   }
 
-    public function setEstado(string $estado): void
+    public function setEstado(Status $estado): void
   {
     $this->estado = $estado;
   }

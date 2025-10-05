@@ -9,7 +9,7 @@ ob_start();
 
 <!-- Hero Section -->
 <section class="hero-section d-flex align-items-center position-relative">
-  <div class="container">
+  <div class="container index-up">
     <div class="row align-items-center">
       <div class="col-lg-6">
         <h1 class="display-2 fw-bold text-white mb-4">

@@ -8,9 +8,9 @@
 }
 
 .hero-section {
-  background: linear-gradient(135deg, var(--bs-secondary) 0%, #0d1426 100%);
-  min-height: 100vh;
+  background-image: linear-gradient(135deg, var(--bs-secondary) 0%, #0d1426 100%);
   position: relative;
+  min-height: 100vh;
   overflow: hidden;
 }
 
@@ -21,12 +21,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(177, 247, 253, 0.1) 0%, transparent 50%),
-  radial-gradient(circle at 80% 20%, rgba(177, 247, 253, 0.1) 0%, transparent 50%);
+  z-index: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(177, 247, 253, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(177, 247, 253, 0.1) 0%, transparent 50%);
+}
+
+.index-up {
+  z-index: 1;
 }
 
 .service-card {
-  background: rgba(31, 46, 100, 0.3);
+  background: var(--bs-secondary);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(177, 247, 253, 0.2);
   transition: all 0.3s ease;

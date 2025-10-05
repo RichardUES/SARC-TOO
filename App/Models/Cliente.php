@@ -2,23 +2,35 @@
 
 namespace App\Models;
 
+use App\Models\enums\Status;
 use DateTime;
+use App\Models\Usuario;
 
-class Cliente
+class Cliente extends Usuario
 {
 
-public function __construct(
-  private string $codigo,
-  private Usuario $usuario,
-  private DateTime $fecha_nac,
-  private string $primer_nombre,
-  private string $segundo_nombre,
-  private string $primer_apellido,
-  private string $segundo_apellido,
-  private string $telefono,
-  private string $dui,
-  private string $estado
-  ) { }
+  private string $codigo;
+  private Usuario $usuario;
+  private DateTime $fecha_nac;
+  private string $primer_nombre;
+  private string $segundo_nombre;
+  private string $primer_apellido;
+  private string $segundo_apellido;
+  private string $telefono;
+  private string $dui;
+  private DateTime $fecha_registro;
+  private Status $estado;
+
+public function __construct() { }
+
+  public function getFullName(): string {
+    return  $this->primer_nombre . " " . $this->segundo_nombre . " " . $this->primer_apellido . " " . $this->segundo_apellido;
+  }
+
+  public function getShortFullName(): string {
+    return  $this->primer_nombre . " " . $this->primer_apellido;
+  }
+
 
   public function __get($name){
     return $this->$name;
@@ -71,7 +83,12 @@ public function __construct(
     $this->dui = $dui;
   }
 
-  public function setEstado(string $estado): void
+  public function setFechaRegistro(DateTime $fecha_registro): void
+  {
+    $this->fecha_registro = $fecha_registro;
+  }
+
+  public function setEstado(Status $estado): void
   {
     $this->estado = $estado;
   }

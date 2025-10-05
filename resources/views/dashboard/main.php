@@ -8,6 +8,8 @@
 
     <title>Panel Administrativo</title>
 
+  <link rel="shortcut icon" href="<?= VIRTUAL_PATH ?>/assets/brand/favicon-logo-light.svg" type="image/x-icon">
+
     <link rel="stylesheet" href="../styles/app.css">
 
 </head>
@@ -22,13 +24,11 @@
         <h2>Main</h2>
     </main>
 
-    <aside class="sidebar" >
-        <h2>sidebar</h2>
-    </aside>
+  <?php require_once "layouts/sidebar.php"; ?>
 
-    <footer class="footer">
-        <h2>Footer</h2>
-    </footer>
+
+    <script src="<?= VIRTUAL_PATH ?>/scripts/bootstrap.js" ></script>
+    <script src="<?= VIRTUAL_PATH ?>/scripts/app.js" ></script>
 
 </body>
 

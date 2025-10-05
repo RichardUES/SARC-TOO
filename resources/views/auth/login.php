@@ -21,30 +21,30 @@ ob_start();
           </div>
       <?php endif; ?>
 
-        <form method="POST" action="/home/contact" class="contact-form">
+        <form method="POST" action="/auth/login" class="contact-form">
             <div class="form-group">
-                <label for="name">Nombre:</label>
+                <label for="username">Correo o username:</label>
                 <input
                         type="text"
-                        id="name"
-                        name="name"
-                        value="<?= htmlspecialchars($old_data['name'] ?? '') ?>"
+                        id="username"
+                        name="username"
+                        value="<?= htmlspecialchars($old_data['username'] ?? '') ?>"
                         required
                 >
             </div>
 
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label for="password">Clave:</label>
                 <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="<?= htmlspecialchars($old_data['email'] ?? '') ?>"
+                        type="password"
+                        id="password"
+                        name="password"
+                        value="<?= htmlspecialchars($old_data['password'] ?? '') ?>"
                         required
                 >
             </div>
 
-            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
         </form>
     </div>
 </div>

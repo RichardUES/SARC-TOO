@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Auth;
+namespace App\Core;
 
 interface GenericCrud
 {

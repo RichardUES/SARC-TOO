@@ -3,9 +3,18 @@
 namespace App\Modules\Home;
 
 use App\Core\Controller;
+use App\Modules\Auth\Repositories\interfaces\IRolDAO;
+use App\Modules\Auth\Repositories\RolRepository;
 
 class HomeController extends Controller
 {
+
+  private IRolDAO $rolRepository;
+
+  public function __construct() {
+    $this->rolRepository = new RolRepository();
+  }
+
   /**
    * Página principal del sitio
    * URL: / o /home

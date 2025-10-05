@@ -1,6 +1,6 @@
-<footer class="container p-lg-5">
+<footer class="container p-lg-3 ">
 
-  <p class="text-center">&copy; <?= date("Y") ?> Luz el Faro. Todos los derechos reservados.</p>
+  <p class="text-center mb-0">&copy; <?= date("Y") ?> Luz el Faro. Todos los derechos reservados.</p>
 
 </footer>
 

@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\enums\Status;
 use DateTime;
 
 class Usuario
 {
 
-  public function __construct(
-    private string $codigo,
-    private Rol    $rol,
-    private string $username,
-    private string $email,
-    private string $clave,
-    private DateTime $fecha_registro,
-    private DateTime $fum,
-    private string $estado
-  )
+  private string $codigo;
+  private Rol $rol;
+  private Agencia $agencia;
+  private string $username;
+  private string $email;
+  private string $clave;
+  private DateTime $fecha_registro;
+  private DateTime $fum;
+  private Status $estado;
+
+  public function __construct()
   {
   }
 
@@ -24,6 +26,8 @@ class Usuario
   {
     return $this->$name;
   }
+
+  /* ================ SETTERS METHODS ================ */
 
   public function setCodigo(string $codigo): void
   {
@@ -33,6 +37,11 @@ class Usuario
   public function setRol(Rol $rol): void
   {
     $this->rol = $rol;
+  }
+
+  public function setAgencia(Agencia $agencia): void
+  {
+    $this->agencia = $agencia;
   }
 
   public function setUsername(string $username): void
@@ -60,13 +69,8 @@ class Usuario
     $this->fum = $fum;
   }
 
-  public function setEstado(string $estado): void
+  public function setEstado(Status $estado): void
   {
     $this->estado = $estado;
   }
-
-  /* ================ SETTERS METHODS ================ */
-
-
-
 }

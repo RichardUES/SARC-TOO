@@ -1,3 +1,40 @@
+@font-face {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  src: url("/public/assets/fonts/Lato-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Lato-bold", sans-serif;
+  font-weight: 700;
+  src: url("/public/assets/fonts/Lato-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  src: url("/public/assets/fonts/Raleway-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Raleway-bold", sans-serif;
+  font-weight: 700;
+  src: url("/public/assets/fonts/Raleway-Bold.ttf") format("truetype");
+}
+
 :root {
     --main-font: "Lato", sans-serif;
+    --title-font: "Raleway", sans-serif;
+
+    /*  GRADIENTS */
+  --gradient-serene-sunset: linear-gradient(135deg, #B1F7FD 0%, #1F2E64 100%);
+  --gradient-morning-sky: linear-gradient(to right, #00CFE8 0%, #B1F7FD 100%);
+  --gradient-success: linear-gradient(to top, #28C76F 0%, #00CFE8 100%);
+  --gradient-warning: linear-gradient(45deg, #FF9F43 0%, #EA5455 100%);
+  /* Para el fondo de un elemento */
+  --gradient-deep-blue: linear-gradient(to right, #1F2E64 0%, #00CFE8 100%);
+  /* Para un borde con gradiente, necesitas un truco CSS */
+  --border-gradient:linear-gradient(to right, #1F2E64, #00CFE8) 1;
+
 }
