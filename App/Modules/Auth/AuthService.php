@@ -3,16 +3,16 @@
 namespace App\Modules\Auth;
 
 use App\Models\Usuario;
-use App\Modules\Auth\Repositories\interfaces\IUsuarioDAO;
+use App\Modules\Auth\Repositories\interfaces\IUsuario;
 use App\Modules\Auth\Repositories\UsuarioRepository;
 
 class AuthService
 {
 
-  private IUsuarioDAO $usuario;
+  private IUsuario $usuarioRepository;
 
   public function __construct() {
-    $this->usuario = new UsuarioRepository();
+    $this->usuarioRepository = new UsuarioRepository();
   }
 
   public function login(string $userOrEmail, string $clave): Usuario
@@ -26,11 +26,13 @@ class AuthService
 
   }
 
-  public function registrarUsuario(): Usuario | null
+  /**
+   * Metodo de servicio para registrar un nuevo usuario
+   * @return bool
+   */
+  public function userRegister(Usuario $user): bool
   {
-    var_dump($_POST);
-    die();
-    return null;
+    return $this->usuarioRepository->save($user);
   }
 
   public function activarCuenta(string $token): void

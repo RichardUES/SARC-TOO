@@ -2,20 +2,25 @@
 
 namespace App\Modules\Auth\Repositories;
 
+use App\Config\Database;
 use App\Models\Usuario;
-use App\Modules\Auth\Repositories\interfaces\IRolDAO;
-use App\Modules\Auth\Repositories\interfaces\IUsuarioDAO;
+use App\Modules\Auth\Repositories\interfaces\IRol;
+use App\Modules\Auth\Repositories\interfaces\IUsuario;
 use App\Modules\Auth\Rol;
 use PDO;
 
-class UsuarioRepository implements IUsuarioDAO
+class UsuarioRepository implements IUsuario
 {
 
-  private IRolDAO $rolRepository;
+  private IRol $rolRepository;
+  private PDO $db;
 
   public function __construct()
   {
 
+    $con = new Database();
+    $this->db = $con->getConexion();
+    
     $this->rolRepository = new RolRepository();
 
   }
@@ -77,6 +82,10 @@ class UsuarioRepository implements IUsuarioDAO
 
     return $usuario_obj;
 
+  }
+
+  public function signin(string $password, string $userOrEmail): Usuario {
+    return new Usuario();
   }
 
 }

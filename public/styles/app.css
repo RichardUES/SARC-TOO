@@ -31,7 +31,7 @@ body {
 
 .main{
   grid-area: main;
-  background-color: #0d6efd;
+  /* background-color: #0d6efd; */
   overflow-y: scroll;
 }
 

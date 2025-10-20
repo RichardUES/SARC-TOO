@@ -3,13 +3,13 @@
 namespace App\Modules\Home;
 
 use App\Core\Controller;
-use App\Modules\Auth\Repositories\interfaces\IRolDAO;
+use App\Modules\Auth\Repositories\interfaces\IRol;
 use App\Modules\Auth\Repositories\RolRepository;
 
 class HomeController extends Controller
 {
 
-  private IRolDAO $rolRepository;
+  private IRol $rolRepository;
 
   public function __construct() {
     $this->rolRepository = new RolRepository();

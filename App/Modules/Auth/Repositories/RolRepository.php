@@ -4,12 +4,12 @@ namespace App\Modules\Auth\Repositories;
 
 use App\Config\Database;
 use App\Models\Rol;
-use App\Modules\Auth\Repositories\interfaces\IRolDAO;
+use App\Modules\Auth\Repositories\interfaces\IRol;
 use DateTime;
 use PDO;
 use PDOException;
 
-class RolRepository implements IRolDAO
+class RolRepository implements IRol
 {
 
   private PDO $db;

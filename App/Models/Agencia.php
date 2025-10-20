@@ -11,7 +11,7 @@ class Agencia
   private string $nombre;
   private string $direccion;
   private string $telefono;
-  private Status $estado;
+  private Status|string $estado;
 
   public function __construct(){
 
@@ -41,7 +41,7 @@ class Agencia
     $this->telefono = $telefono;
   }
 
-  public function setEstado(Status $estado): void
+  public function setEstado(Status|string $estado): void
   {
     $this->estado = $estado;
   }

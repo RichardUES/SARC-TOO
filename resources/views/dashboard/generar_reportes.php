@@ -3,15 +3,15 @@
 <?php require_once "layouts/header.php" ?>
 
 
-<main class="main">
+<article class="areas">
 
-  <h2>Main</h2>
+  <h2>Generación de reportes</h2>
 
   <?php if (isset($_SESSION["autorizado"])) : ?>
     <p>Estas autorizado <?= $_SESSION["autorizado"] ?> </p>
   <?php endif; ?>
 
-</main>
+</article>
 
 
 <?php require_once "layouts/sidebar.php"; ?>

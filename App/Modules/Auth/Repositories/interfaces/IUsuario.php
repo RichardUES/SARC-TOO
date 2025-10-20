@@ -4,7 +4,7 @@ namespace App\Modules\Auth\Repositories\interfaces;
 
 use App\Models\Usuario;
 
-interface IUsuarioDAO
+interface IUsuario
 {
 
   public function save(Usuario $data): bool;

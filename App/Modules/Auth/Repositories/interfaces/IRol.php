@@ -4,7 +4,7 @@ namespace App\Modules\Auth\Repositories\interfaces;
 
 use App\Models\Rol;
 
-interface IRolDAO
+interface IRol
 {
   public function save(Rol $data): bool;
 

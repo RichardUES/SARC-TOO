@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Controller {
 
   protected function view($view, $data = []) {
@@ -19,7 +21,7 @@ class Controller {
   }
 
   protected function redirect($url) {
-    header("Location: /{$url}");
+    header("Location: {$url}");
     exit;
   }
 

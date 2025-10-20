@@ -16,6 +16,7 @@ define('APP_PATH', BASE_PATH . '/App');
 define('PUBLIC_PATH', __DIR__);
 //echo "public_path: ".PUBLIC_PATH."<br>";
 define('RESOURCES_PATH', BASE_PATH . '/resources');
+define("VIEWS_PATH", RESOURCES_PATH . "/views");
 //echo "RESOURCES_path: ".RESOURCES_PATH."<br>";
 define("VIRTUAL_PATH", "http://luzelfaro.com");
 

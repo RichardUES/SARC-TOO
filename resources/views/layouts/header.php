@@ -37,7 +37,7 @@
             <span>Ingresar</span>
           </a>
           <a
-            href="/register/new"
+            href="/auth/register"
             class="btn btn-primary">
             <span>Registrarse</span>
             <i class="bi bi-person-plus"></i>

@@ -259,7 +259,7 @@ ob_start();
           iluminar sus hogares y negocios. Obtén tu conexión hoy mismo.
         </p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
-          <a href="/contacto" class="btn btn-primary btn-lg neon-border pulse-animation">
+          <a href="/home/contact" class="btn btn-primary btn-lg neon-border pulse-animation">
             <i class="bi bi-telephone-fill me-2"></i>
             Solicitar Conexión
           </a>
