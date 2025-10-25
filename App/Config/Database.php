@@ -8,23 +8,31 @@ class Database
 {
 
   private PDO $con;
+  private static $instance;
 
-  public function __construct()
+  private function __construct()
   {
     $this->connect();
+  }
+
+  public static function getIntance() {
+
+    if( !self::$instance instanceof self ){
+      self::$instance = new self();
+    }
+
+    return self::$instance;
+    
   }
 
   private function connect(): void
   {
 
-    $dbname = 'sarc_db';
-    $user = 'root';
-    $password = 'database';
-    // $password = '';
-
     try {
 
-      $this->con = new PDO("mysql:host=localhost:3306;dbname=$dbname", $user, $password);
+      $this->con = new PDO("mysql:host=" . $_ENV["SERVER"] . ";dbname=" . $_ENV["DBNAME"], $_ENV["USER"], $_ENV["PASSWORD"]);
+      $setnames = $this->con->prepare("SET NAMES 'utf8'");
+      $setnames->execute();
       // Configurar el modo de error para excepciones
       $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       // Deshabilitar autocommit
@@ -34,7 +42,7 @@ class Database
 
     } catch (PDOException $exc) {
 
-      echo '<h1> Error de conexion compa: ' . $exc->getMessage() . '</h1>';
+      echo '<h1> Error de conexión: ' . $exc->getMessage() . '</h1>';
       echo '<h2> En la linea: ' . $exc->getLine() . '</h2>';
       echo '<pre>';
       var_dump($exc->getTrace());
@@ -44,7 +52,7 @@ class Database
 
   }
 
-  public function getConexion(): PDO
+  public function getConnection(): PDO
   {
     return $this->con;
   }

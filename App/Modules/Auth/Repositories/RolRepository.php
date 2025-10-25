@@ -13,9 +13,9 @@ class RolRepository implements IRol
 {
 
   private PDO $db;
+
   public function __construct() {
-    $con = new Database();
-    $this->db = $con->getConexion();
+    $this->db = Database::getIntance()->getConnection();
   }
 
   public function save(Rol $data): bool

@@ -18,8 +18,7 @@ class UsuarioRepository implements IUsuario
   public function __construct()
   {
 
-    $con = new Database();
-    $this->db = $con->getConexion();
+    $this->db = Database::getIntance()->getConnection();
     
     $this->rolRepository = new RolRepository();
 

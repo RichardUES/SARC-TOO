@@ -14,8 +14,7 @@ class AgenciaRepository
 
   public function __construct()
   {
-    $con = new Database();
-    $this->db = $con->getConexion();
+    $this->db = Database::getIntance()->getConnection();
   }
 
   public function findAll(): array
