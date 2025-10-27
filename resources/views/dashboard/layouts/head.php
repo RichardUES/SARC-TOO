@@ -19,7 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
   <link rel="shortcut icon" href="<?= VIRTUAL_PATH ?>/assets/brand/favicon-logo-light.svg" type="image/x-icon">
 
-  <link rel="stylesheet" href="../styles/app.css">
+  <link rel="stylesheet" href="<?= VIRTUAL_PATH ?>/styles/app.css">
 
 </head>
 

@@ -7,7 +7,7 @@ use App\Models\Usuario;
 interface IUsuario
 {
 
-  public function save(Usuario $data): bool;
+  public function save(Usuario $data): ?Usuario;
 
   public function delete(int $id): bool;
 

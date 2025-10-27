@@ -3,20 +3,28 @@
 namespace App\Modules\Dashboard;
 
 use App\Core\Controller;
+use App\Core\GenericCrud;
 use App\Models\Agencia;
+use App\Models\Area;
 use App\Modules\Dashboard\administracion\AgenciaService;
+use App\Modules\Dashboard\administracion\AreaService;
 
 class DashboardController extends Controller
 {
   private AgenciaService $agenciaService;
+  private AreaService $areaService;
 
   private $admin_path = "dashboard/administracion";
 
-  public function __construct() {
-    $this->agenciaService = new AgenciaService;
+  public function __construct()
+  {
+    $this->agenciaService = new AgenciaService();
+    $this->areaService = new AreaService();
   }
 
-  // ROUTER DEL PANEL ADMINISTRATIVO
+  /* ===================================================== */
+  /* ========== ROUTER DEL DASHBOARD ============ */
+  /* ===================================================== */
 
   public function index()
   {
@@ -29,8 +37,9 @@ class DashboardController extends Controller
     $this->view("dashboard/registro_usuarios");
   }
 
-  public function mis_tickets()
+  public function mis_tickets($id)
   {
+    //var_dump($id);
     $this->view("dashboard/mis_tickets");
   }
 
@@ -101,7 +110,7 @@ class DashboardController extends Controller
     $agencia->setDireccion($direccion);
     $agencia->setTelefono($telefono);
 
-    $isCreate = $this->agenciaService->createAgency($agencia);
+    $isCreate = $this->agenciaService->save($agencia);
 
     if ($isCreate) {
       $this->view(
@@ -111,6 +120,51 @@ class DashboardController extends Controller
     } else {
       $this->view(
         $this->admin_path . "/gestion_agencias",
+        ["success" => "Hubo problema al crear la agencia, consulte con el administrador de IT"]
+      );
+    }
+  }
+
+  public function crear_area()
+  {
+
+    if (!$this->isPost()) {
+      $this->view(
+        $this->admin_path . "/gestion_areas",
+        ["Error" => "Método no permitido"]
+      );
+      return;
+    }
+
+    // Extraer valor de campos
+    $nombre = $_POST["nombre"] ?? '';
+    $descripcion = $_POST["descripcion"] ?? '';
+
+    // validacion básica
+    if (
+      $nombre === ''
+      || $descripcion === ''
+    ) {
+      $this->view($this->admin_path . "/gestion_areas", ["Error" => "Nombre y descripción son obligatorios"]);
+      return;
+    }
+
+    // Procedemos a crear la Agencia
+    $area = new Area();
+
+    $area->setNombre($nombre);
+    $area->setDescripcion($descripcion);
+
+    $isCreate = $this->areaService->save($area);
+
+    if ($isCreate) {
+      $this->view(
+        $this->admin_path . "/gestion_areas",
+        ["Success" => "Area creada satisfactoriamente!"]
+      );
+    } else {
+      $this->view(
+        $this->admin_path . "/gestion_areas",
         ["success" => "Hubo problema al crear la agencia, consulte con el administrador de IT"]
       );
     }

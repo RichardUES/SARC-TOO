@@ -9,16 +9,10 @@ use App\Modules\Auth\Repositories\UsuarioRepository;
 class AuthService
 {
 
-  private IUsuario $usuarioRepository;
+  private UsuarioRepository $userRepository;
 
   public function __construct() {
-    $this->usuarioRepository = new UsuarioRepository();
-  }
-
-  public function login(string $userOrEmail, string $clave): Usuario
-  {
-    return new Usuario();
-
+    $this->userRepository = new UsuarioRepository();
   }
 
   public function logout(Usuario $usuario): void
@@ -26,13 +20,10 @@ class AuthService
 
   }
 
-  /**
-   * Metodo de servicio para registrar un nuevo usuario
-   * @return bool
-   */
-  public function userRegister(Usuario $user): bool
-  {
-    return $this->usuarioRepository->save($user);
+  public function signin($username_or_email, $password): mixed {
+
+    return $this->userRepository->signin($username_or_email, $password);
+
   }
 
   public function activarCuenta(string $token): void

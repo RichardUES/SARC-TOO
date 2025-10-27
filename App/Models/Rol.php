@@ -11,7 +11,7 @@ class Rol
   private string $nombre;
   private DateTime $fecha_registro;
   private DateTime $fum;
-  private Status $estado;
+  private string $estado;
 
   public function __construct() { }
 
@@ -46,7 +46,7 @@ class Rol
     $this->fecha_registro = $fecha_registro;
   }
 
-    public function setEstado(Status $estado): void
+    public function setEstado(string $estado): void
   {
     $this->estado = $estado;
   }

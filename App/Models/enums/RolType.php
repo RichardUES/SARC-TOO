@@ -2,7 +2,7 @@
 
 namespace App\Models\enums;
 
-enum UserRol: int
+enum RolType: int
 {
   case ADMIN        = 1; // "ADMINISTRADOR";
 

@@ -3,7 +3,7 @@
 <?php require_once "layouts/header.php" ?>
 
 
-<article class="areas">
+<article class="container main">
 
   <h2>Mis tickets</h2>
 

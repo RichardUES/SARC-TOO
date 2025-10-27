@@ -3,16 +3,16 @@
 namespace App\Modules\Dashboard\administracion;
 
 use App\Core\GenericCrud;
-use App\Models\Agencia;
-use App\Modules\Dashboard\administracion\repositories\AgenciaRepository;
+use App\Models\Area;
+use App\Modules\Dashboard\administracion\repositories\AreaRepository;
 
-class AgenciaService implements GenericCrud {
+class AreaService implements GenericCrud {
 
   private GenericCrud $adminRepository;
 
   public function __construct() {
 
-    $this->adminRepository = new AgenciaRepository();
+    $this->adminRepository = new AreaRepository();
 
   }
 
@@ -22,9 +22,9 @@ class AgenciaService implements GenericCrud {
 
   }
 
-  public function save(mixed $agency): bool {
+  public function save(mixed $area): bool {
 
-    return $this->adminRepository->save($agency);
+    return $this->adminRepository->save($area);
 
   }
 

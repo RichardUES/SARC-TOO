@@ -3,11 +3,12 @@
 namespace App\Modules\Dashboard\administracion\repositories;
 
 use App\Config\Database;
+use App\Core\GenericCrud;
 use App\Models\Agencia;
 use PDO;
 use PDOException;
 
-class AgenciaRepository
+class AgenciaRepository implements GenericCrud
 {
 
   private PDO $db;
@@ -54,7 +55,7 @@ class AgenciaRepository
     }
   } // FIN findAll()
 
-  public function findById(int $id): Agencia|null
+  public function findById(int $id)
   {
 
     $query = "SELECT * FROM AGENCIA AS A 
@@ -90,29 +91,58 @@ class AgenciaRepository
     }
   } // FIN findById()
 
-  public function save(Agencia $agency): bool
+  public function save(mixed $agency): bool
   {
 
     try {
-      // Traslado las propiedades del objeto a variables
-      $nombre = $agency->nombre;
-      $direccion = $agency->direccion;
-      $telefono = $agency->telefono;
 
-      $this->db->beginTransaction();
+      if (isset($agency->codigo)) {
+        # Actualizamos
+        // Traslado las propiedades del objeto a variables
+        $id = $agency->codigo;
+        $nombre = $agency->nombre;
+        $direccion = $agency->direccion;
+        $telefono = $agency->telefono;
+        $estado = $agency->estado;
 
-      $query = "INSERT INTO AGENCIA(AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) 
+        $this->db->beginTransaction();
+
+        $query = "UPDATE AGENCIA 
+                  SET AGE_NOMBRE=:NOMBRE, AGE_DIRECCION=:DIRECCION, AGE_TELEFONO=:TELEFONO, AGE_ESTADO=:ESTADO 
+                  WHERE AGE_CODIGO=:CODIGO ";
+
+
+        $ps = $this->db->prepare($query);
+
+        $ps->bindParam(":CODIGO", $id);
+        $ps->bindParam(":NOMBRE", $nombre);
+        $ps->bindParam(":DIRECCION", $direccion);
+        $ps->bindParam(":TELEFONO", $telefono);
+        $ps->bindParam(":ESTADO", $estado);
+
+        $ps->execute();
+      } else {
+        # Guaradmos como nuevo
+        // Traslado las propiedades del objeto a variables
+        $nombre = $agency->nombre;
+        $direccion = $agency->direccion;
+        $telefono = $agency->telefono;
+
+        $this->db->beginTransaction();
+
+        $query = "INSERT INTO AGENCIA(AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) 
                 VALUES(:NOMBRE, :DIRECCION, :TELEFONO)";
 
 
-      $ps = $this->db->prepare($query);
+        $ps = $this->db->prepare($query);
 
-      $ps->bindParam(":NOMBRE", $nombre);
-      $ps->bindParam(":DIRECCION", $direccion);
-      $ps->bindParam(":TELEFONO", $telefono);
-      // $ps->bindParam(":estado", $agency->estado); // Por defecto en DB es ACTIVO
+        $ps->bindParam(":NOMBRE", $nombre);
+        $ps->bindParam(":DIRECCION", $direccion);
+        $ps->bindParam(":TELEFONO", $telefono);
+        // $ps->bindParam(":estado", $agency->estado); // Por defecto en DB es ACTIVO
 
-      $ps->execute();
+        $ps->execute();
+      }
 
       $this->db->commit();
 
@@ -127,4 +157,8 @@ class AgenciaRepository
 
   } // FIN metodo SAve()
 
+  public function delete(int $id): bool
+  {
+    return false;
+  }
 }// FIN Clase

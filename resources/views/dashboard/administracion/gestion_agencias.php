@@ -8,7 +8,7 @@
   <h2>Gestión de Agencias</h2>
 
   <?php if (isset($_SESSION["autorizado"])) : ?>
-    <p>Estas autorizado <?= $_SESSION["autorizado"] ?> </p>
+    <p>Estas autorizado <?= $_SESSION["autorizado"]->username ?> </p>
   <?php endif; ?>
 
   <?php if (isset($data['Error'])): ?>

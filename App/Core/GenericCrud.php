@@ -11,7 +11,7 @@ interface GenericCrud
    */
   public function save($data): bool;
 
-  public function delete($id): bool;
+  public function delete(int $id): bool;
 
   /**
    * @return array Un Array Asociativo ccon los objetos obtenidos
@@ -22,6 +22,6 @@ interface GenericCrud
    * @param $id El identificador con el que se busca el objeto
    * @return array Un Array Asociativo con la informacion del objeto obtenido
    */
-  public function findById($id): array;
+  public function findById(int $id);
 
 }

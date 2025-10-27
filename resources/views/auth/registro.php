@@ -18,20 +18,11 @@ ob_start();
 
     <?php endif; ?>
 
-    <?php if (isset($data['Success'])): ?>
-
-      <div class="alert alert-success">
-        <strong> <?= $data['Success'] ?> </strong>
-        <strong> <?= $data['username'] ?> </strong>
-      </div>
-
-    <?php endif; ?>
-
 
     <section class="row">
       <div class="col-3"></div>
       <div class="col-6">
-        <form method="POST" action="/auth/userRegister" class="contact-form">
+        <form method="POST" action="/auth/createAccount" class="contact-form">
 
           <div class="form-group">
             <label for="username">Nombre de usuario</label>

@@ -20,7 +20,7 @@ ob_start();
       Por favor, inicia sesión con las credenciales correctas o contacta al administrador.
     </p>
     <div class="error-actions">
-      <a href="/login" class="button button-primary">Iniciar Sesión</a>
+      <a href="/auth/login" class="button button-primary">Iniciar Sesión</a>
       <a href="/" class="button button-secondary">Ir al Inicio</a>
     </div>
   </div>

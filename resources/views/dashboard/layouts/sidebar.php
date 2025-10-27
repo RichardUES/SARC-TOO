@@ -33,7 +33,7 @@
 
         <li class="menu__item">
           <!-- Los tickets asiganados al Usuario con Rol de Agnete -->
-          <a href="/dashboard/tickets/1" class="menu__link">
+          <a href="/dashboard/mis_tickets/1" class="menu__link">
             <i class="bi bi-ticket"></i>
             <span class="text">Mis Tickets <span class="badge bg-danger mx-3">5</span> </span>
           </a>

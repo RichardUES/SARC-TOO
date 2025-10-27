@@ -8,7 +8,7 @@
   <h2>Gestión de Usuarios</h2>
 
   <?php if (isset($_SESSION["autorizado"])) : ?>
-    <p>Estas autorizado <?= $_SESSION["autorizado"] ?> </p>
+    <p>Estas autorizado <?= $_SESSION["autorizado"]->username ?> </p>
   <?php endif; ?>
 
 </article>
