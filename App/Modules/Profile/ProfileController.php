@@ -12,4 +12,9 @@ class ProfileController extends Controller
     $this->view("profile/profile");
   }
 
+  public function personal_info() {
+    session_start();
+    $this->view("profile/personal_info");
+  }
+
 }
