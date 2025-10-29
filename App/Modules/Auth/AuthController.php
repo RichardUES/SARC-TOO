@@ -32,6 +32,13 @@ class AuthController extends Controller
     $this->view("auth/login");
   }
 
+  public function register()
+  {
+    $this->view("auth/registro", [
+      "agencias" => $this->agenciaService->findAll()
+    ]);
+  }
+
   public function login(): void
   {
     $this->view("auth/login");
