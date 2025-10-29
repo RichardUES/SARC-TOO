@@ -1,6 +1,15 @@
-<?php if (!isset($_SESSION["autorizado"])) header("Location: /errors/401"); ?>
+<?php 
 
-<div class="card shadow-sm">
+if (!isset($_SESSION["autorizado"])) header("Location: /errors/401");
+
+require_once "layouts/header.php";
+
+?>
+
+<!-- Menu lateral (sidebar) -->
+<?php require_once "layouts/sidebar.php" ?>
+
+<div class="card shadow-sm col-md-9">
     <div class="card-body">
         <h3 class="card-title h5 mb-4">Crear Nuevo Ticket</h3>
         
@@ -70,20 +79,4 @@
     </div>
 </div>
 
-<!-- Script para cargar áreas dinámicamente -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/areas')
-        .then(response => response.json())
-        .then(areas => {
-            const areaSelect = document.getElementById('area');
-            areas.forEach(area => {
-                const option = document.createElement('option');
-                option.value = area.id;
-                option.textContent = area.nombre;
-                areaSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error cargando áreas:', error));
-});
-</script>
+<?php require_once "layouts/footer.php" ?>

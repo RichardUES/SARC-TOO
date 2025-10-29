@@ -1,6 +1,15 @@
-<?php if (!isset($_SESSION["autorizado"])) header("Location: /errors/401"); ?>
+<?php 
 
-<div class="card shadow-sm">
+if (!isset($_SESSION["autorizado"])) header("Location: /errors/401");
+
+require_once "layouts/header.php";
+
+?>
+
+<!-- Menu lateral (sidebar) -->
+<?php require_once "layouts/sidebar.php" ?>
+
+<div class="card shadow-sm col-md-9">
     <div class="card-body">
         <h3 class="card-title h5 mb-4">Configuración de la Cuenta</h3>
         
@@ -39,51 +48,7 @@
             </div>
         </form>
 
-        <!-- Preferencias de Notificaciones -->
-        <form method="POST" action="/profile/update-preferences">
-            <h4 class="h6 mb-3">Preferencias de Notificaciones</h4>
-            
-            <div class="mb-3">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="notifEmail" 
-                           name="notifications[email]" checked>
-                    <label class="form-check-label" for="notifEmail">
-                        Recibir notificaciones por correo electrónico
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="notifSistema" 
-                           name="notifications[system]" checked>
-                    <label class="form-check-label" for="notifSistema">
-                        Mostrar notificaciones del sistema
-                    </label>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save me-2"></i>Guardar Preferencias
-                </button>
-            </div>
-        </form>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Validación de contraseñas
-    const form = document.querySelector('form[action="/profile/update-password"]');
-    const newPass = document.getElementById('passwordNueva');
-    const confirmPass = document.getElementById('passwordConfirmar');
-
-    form.addEventListener('submit', function(e) {
-        if (newPass.value !== confirmPass.value) {
-            e.preventDefault();
-            alert('Las contraseñas nuevas no coinciden');
-        }
-    });
-});
-</script>
+<?php require_once "layouts/footer.php" ?>
