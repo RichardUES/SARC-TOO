@@ -9,34 +9,24 @@ use App\Models\Rol;
 class ProfileService
 {
 
-  public function actualizarPerfilCliente(Cliente $client): void
+  private ProfileRepository $profileRepository;
+
+  public function __construct() {
+    $this->profileRepository = new ProfileRepository();
+  }
+
+  public function createProfileClient(Cliente $client): ?Cliente
+  {
+    return $this->profileRepository->createProfileClient($client);
+  }
+
+  public function updateProfileClient(Cliente $client): void
   {
 
   }
 
-  public function actualizarDatosUsuario(Usuario $user): void
-  {
 
-  }
 
-  public function cambiarRol(int $userId, Rol $rol): void
-  {
 
-  }
-
-  public function activarUsuario(int $userId): void
-  {
-
-  }
-
-  public function inactivarUsuario(int $userId): void
-  {
-
-  }
-
-  public function crearUsuarioInterno(Usuario $user, Rol $rol): void
-  {
-
-  }
 
 }

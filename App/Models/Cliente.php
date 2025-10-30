@@ -9,8 +9,8 @@ use App\Models\Usuario;
 class Cliente extends Usuario
 {
 
-  private string $codigo;
-  private Usuario $usuario;
+  private int $codigo;
+  private int $usuarioID;
   private DateTime $fecha_nac;
   private string $primer_nombre;
   private string $segundo_nombre;
@@ -19,7 +19,7 @@ class Cliente extends Usuario
   private string $telefono;
   private string $dui;
   private DateTime $fecha_registro;
-  private Status $estado;
+  private string $estado;
 
 public function __construct() { }
 
@@ -38,14 +38,14 @@ public function __construct() { }
 
   /* ====================== SETTER METHODS ====================== */
 
-  public function setCodigo(string $codigo): void
+  public function setCodigo(int $codigo): void
   {
     $this->codigo = $codigo;
   }
 
-  public function setUsuario(Usuario $usuario): void
+  public function setUsuarioID(int $usuarioID): void
   {
-    $this->usuario = $usuario;
+    $this->usuarioID = $usuarioID;
   }
 
   public function setFechaNac(DateTime $fecha_nac): void
@@ -88,7 +88,7 @@ public function __construct() { }
     $this->fecha_registro = $fecha_registro;
   }
 
-  public function setEstado(Status $estado): void
+  public function setEstado(string $estado): void
   {
     $this->estado = $estado;
   }
