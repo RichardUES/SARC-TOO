@@ -25,7 +25,10 @@ class ProfileService
 
   }
 
-
+  public function getProfileByUserID(int $userID): ?Cliente
+  {
+    return $this->profileRepository->getProfileByUserID($userID);
+  }
 
 
 

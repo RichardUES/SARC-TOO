@@ -12,56 +12,81 @@ class ProfileController extends Controller
 
   private ProfileService $profileService;
 
-  public function __construct() {
+  public function __construct()
+  {
 
     $this->profileService = new ProfileService();
 
   }
 
-  public function index()
+  private function profileInit(): void
   {
     session_start();
+
+    try {
+
+      $isCliente = $this->profileService->getProfileByUserID($_SESSION['autorizado']->codigo);
+      // var_dump($_SESSION['autorizado']->codigo);
+
+      if (isset($isCliente)) {
+        $_SESSION["cliente"] = $isCliente;
+      }
+
+    } catch (\Throwable $th) {
+      //echo "Error al obtener el perfil del cliente: " . $th->getMessage();
+    }
+
+  }
+
+  public function index()
+  {
+    $this->profileInit();
     $this->view("profile/profile");
   }
 
   public function personal_info()
   {
-    session_start();
+    $this->profileInit();
     $this->view("profile/personal_info");
   }
 
   public function create_ticket()
   {
-    session_start();
+    $this->profileInit();
     $this->view("profile/create_ticket");
   }
 
   public function ticket_history()
   {
-    session_start();
+    $this->profileInit();
     $this->view("profile/ticket_history");
   }
 
   public function notifications()
   {
-    session_start();
+    $this->profileInit();
     $this->view("profile/notifications");
   }
 
   public function settings()
   {
-    session_start();
+    $this->profileInit();
     $this->view("profile/settings");
   }
 
-  public function update_profile(): void {
+  /**
+   * Crea un perfil nuevo con el usuario existente
+   * @return void
+   */
+  public function update_profile(): void
+  {
 
     // Los datos del usuario los obtengo de la sesión
-    if( session_status() !== PHP_SESSION_ACTIVE ){
+    if (session_status() !== PHP_SESSION_ACTIVE) {
       session_start();
     }
 
-    if( !$this->isPost() ) {
+    if (!$this->isPost()) {
       $_SESSION['Error'] = 'Método no permitido.';
       $this->redirect("/profile/personal_info");
       return;
@@ -76,12 +101,13 @@ class ProfileController extends Controller
     $dui = $_POST['dui'] ?? '';
     $telefono = $_POST['telefono'] ?? '';
 
-    if( $primerNombre === '' 
-        || $primerApellido === '' 
-        || $fechaNac === '' 
-        || $dui === '' 
-        || $telefono === '' ) 
-    {
+    if (
+      $primerNombre === ''
+      || $primerApellido === ''
+      || $fechaNac === ''
+      || $dui === ''
+      || $telefono === ''
+    ) {
       $_SESSION['Error'] = 'Por favor, complete todos los campos obligatorios.';
       $this->redirect("/profile/personal_info");
       return;
@@ -93,19 +119,22 @@ class ProfileController extends Controller
     $client->setSegundoNombre($segundoNombre);
     $client->setPrimerApellido($primerApellido);
     $client->setSegundoApellido($segundoApellido);
-    $client->setFechaNac(new DateTime($fechaNac) );
+    $client->setFechaNac(new DateTime($fechaNac));
     $client->setDui($dui);
     $client->setTelefono($telefono);
 
     $cliente = $this->profileService->createProfileClient($client);
 
-    if ( isset($cliente) ) {
+    if (isset($cliente)) {
       $_SESSION["cliente"] = $cliente;
 
       $this->redirect("/profile/personal_info");
       return;
-      
+
     }
+
+    // Fallo al crear el perfil
+    $_SESSION['Error'] = 'Hubo un error al actualizar el perfil. Por favor, intente de nuevo.';
 
   }
 

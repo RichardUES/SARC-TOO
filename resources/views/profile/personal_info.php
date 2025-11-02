@@ -29,7 +29,7 @@ require_once "layouts/header.php";
     <?php if (isset($_SESSION["cliente"])): ?>
       <div class="alert alert-success">
         <strong>
-          <?= $_SESSION["cliente"]->getFulName() ?>
+         Tu perfil se a creado exitosamete: <?= $_SESSION["cliente"]->getShortFullName() ?>
         </strong>
       </div>
     <?php endif; ?>
@@ -102,7 +102,11 @@ require_once "layouts/header.php";
       <!-- Botones -->
       <div class="d-flex justify-content-end gap-2">
         <button type="reset" class="btn btn-light">Cancelar</button>
-        <button type="submit" class="btn btn-primary">
+        <button
+          type="submit"
+          class="btn btn-primary" 
+          <?= isset($_SESSION["cliente"]) ? 'disabled' : '' ?> 
+        >
           <i class="bi bi-save me-2"></i>Guardar Cambios
         </button>
       </div>

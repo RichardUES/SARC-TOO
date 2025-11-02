@@ -114,4 +114,38 @@ class ProfileRepository
 
   }
 
-}
+  public function getProfileByUserId(int $userId): ?Cliente
+  {
+
+    try {
+
+      $query = "SELECT * FROM CLIENTES WHERE CLI_USUARIO_ID = :USUARIO_ID";
+      $ps = $this->db->prepare($query);
+      $ps->bindParam(":USUARIO_ID", $userId);
+      $ps->execute();
+
+      $result = $ps->fetch(PDO::FETCH_ASSOC);
+
+      if ($result) {
+        $client = new Cliente();
+        $client->setCodigo($result['CLI_CODIGO']);
+        $client->setUsuarioID($result['CLI_USUARIO_ID']);
+        $client->setFechaNac(new \DateTime($result['CLI_FECHA_NAC']));
+        $client->setPrimerNombre($result['CLI_PRIMER_NOM']);
+        $client->setSegundoNombre($result['CLI_SEGUNDO_NOM']);
+        $client->setPrimerApellido($result['CLI_PRIMER_APE']);
+        $client->setSegundoApellido($result['CLI_SEGUNDO_APE']);
+        $client->setTelefono($result['CLI_TELEFONO']);
+        $client->setDui($result['CLI_DUI']);
+
+        return $client;
+      }
+
+
+    } catch (PDOException $e) {
+      return null;
+    }
+
+  } // Fin de getProfileByUserId
+
+}//  Fin de clase

@@ -2,12 +2,24 @@
 
 if (!isset($_SESSION["autorizado"])) header("Location: /errors/401");
 
+if (!isset($_SESSION["cliente"]))
+    $_SESSION["sin_perfil"] = "No tienes un perfil creado. Por favor, crea tu perfil para poder tener historial.";
+
 require_once "layouts/header.php";
 
 ?>
 
 <!-- Menu lateral (sidebar) -->
 <?php require_once "layouts/sidebar.php" ?>
+
+<?php if (isset($_SESSION["sin_perfil"])): ?>
+    <div class="alert alert-warning col-md-9 d-flex justify-content-center align-items-center flex-wrap ">
+        <strong class="h4 w-100 text-center">
+            <?= $_SESSION["sin_perfil"]; ?>
+        </strong>
+        <a href="/profile/personal_info" class="btn btn-outline-info" >Crear perfil aquí</a>
+    </div>
+<?php else: ?>
 
 <div class="card shadow-sm col-md-9">
     <div class="card-body">
@@ -87,5 +99,7 @@ require_once "layouts/header.php";
         </div>
     </div>
 </div>
+
+<?php endif; ?>
 
 <?php require_once "layouts/footer.php" ?>
