@@ -18,6 +18,7 @@ class Usuario
   private DateTime $fecha_registro;
   private DateTime $fum;
   private string $estado;
+  private string $ocupado;
 
   public function __construct()
   {
@@ -74,4 +75,10 @@ class Usuario
   {
     $this->estado = $estado;
   }
+
+  public function setOcupado(string $ocupado): void 
+  {
+    $this->ocupado = $ocupado;
+  }
+
 }

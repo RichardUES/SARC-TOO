@@ -19,6 +19,7 @@ require_once "layouts/header.php";
         </strong>
         <a href="/profile/personal_info" class="btn btn-outline-info" >Crear perfil aquí</a>
     </div>
+    <?php deleteSession('sin_perfil'); ?>
 <?php else: ?>
 
 <div class="card shadow-sm col-md-9">

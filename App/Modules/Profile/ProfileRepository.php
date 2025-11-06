@@ -141,7 +141,7 @@ class ProfileRepository
         return $client;
       }
 
-
+      return null;
     } catch (PDOException $e) {
       return null;
     }

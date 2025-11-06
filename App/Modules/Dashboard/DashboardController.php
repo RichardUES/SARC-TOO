@@ -8,11 +8,14 @@ use App\Models\Agencia;
 use App\Models\Area;
 use App\Modules\Dashboard\administracion\AgenciaService;
 use App\Modules\Dashboard\administracion\AreaService;
+use App\Modules\Tickets\TicketsService;
 
 class DashboardController extends Controller
 {
   private AgenciaService $agenciaService;
   private AreaService $areaService;
+
+  private TicketsService $ticketsService;
 
   private $admin_path = "dashboard/administracion";
 
@@ -20,6 +23,7 @@ class DashboardController extends Controller
   {
     $this->agenciaService = new AgenciaService();
     $this->areaService = new AreaService();
+    $this->ticketsService = new TicketsService();
   }
 
   /* ===================================================== */
@@ -50,7 +54,8 @@ class DashboardController extends Controller
 
   public function cola_tickets()
   {
-    $this->view("dashboard/cola_tickets");
+    $tickets = $this->ticketsService->obtenerColaTickets();
+    $this->view("dashboard/cola_tickets", $tickets);
   }
 
   public function reporteria()

@@ -24,6 +24,7 @@ require_once "layouts/header.php";
           <?= $_SESSION["Error"]; ?>
         </strong>
       </div>
+      <?php deleteSession('Error'); ?>
     <?php endif; ?>
 
     <?php if (isset($_SESSION["cliente"])): ?>

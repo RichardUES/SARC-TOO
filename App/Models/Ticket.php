@@ -11,18 +11,18 @@ class Ticket
 {
 
   private int $codigo;
-  private Cliente $cliente;
-  private Agencia $agencia;
-  private Area $area;
-  private EstadoTicket $estadoTicket;
+  private int $clienteID;
+  private int $agenciaID;
+  private int $areaID;
+  private int $estadoTicket;
   private string $asunto;
   private string $descripcion;
   private DateTime $fecha_creacion;
   private DateTime $fecha_asignacion;
   private DateTime $fecha_cierre;
-  private Priority $prioridad;
-  private OrigenTicket $origen;
-  private Status $status;
+  private string $prioridad;
+  private string $origen;
+  private string $status;
 
   public function __construct() {}
 
@@ -35,22 +35,22 @@ class Ticket
     $this->codigo = $codigo;
   }
 
-  public function setCliente(Cliente $cliente): void
+  public function setClienteID(int $clienteID): void
   {
-    $this->cliente = $cliente;
+    $this->clienteID = $clienteID;
   }
 
-  public function setAgencia(Agencia $agencia): void
+  public function setAgenciaID(int $agenciaID): void
   {
-    $this->agencia = $agencia;
+    $this->agenciaID = $agenciaID;
   }
 
-  public function setArea(Area $area): void
+  public function setAreaID(int $areaID): void
   {
-    $this->area = $area;
+    $this->areaID = $areaID;
   }
 
-  public function setEstadoTicket(EstadoTicket $estadoTicket): void
+  public function setEstadoTicket(int $estadoTicket): void
   {
     $this->estadoTicket = $estadoTicket;
   }
@@ -80,17 +80,17 @@ class Ticket
     $this->fecha_cierre = $fecha_cierre;
   }
 
-  public function setPrioridad(Priority $prioridad): void
+  public function setPrioridad(string $prioridad): void
   {
     $this->prioridad = $prioridad;
   }
 
-  public function setOrigen(OrigenTicket $origen): void
+  public function setOrigen(string $origen): void
   {
     $this->origen = $origen;
   }
 
-  public function setStatus(Status $status): void
+  public function setStatus(string $status): void
   {
     $this->status = $status;
   }

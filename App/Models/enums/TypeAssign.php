@@ -2,7 +2,7 @@
 
 namespace App\Models\enums;
 
-enum TipoAsignacion: string
+enum TypeAssign: string
 {
 
   case AUTOMATIC    = 'AUTOMATICA';

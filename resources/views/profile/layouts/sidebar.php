@@ -50,6 +50,10 @@
               <span class="badge bg-danger rounded-pill float-end" id="notificationsBadge">0</span>
             </a>
 
+            <!-- <a href="/test/testing" class="list-group-item list-group-item-action">
+              <i class="bi bi-bell me-2"></i>Pruebas
+            </a> -->
+
             <a href="/profile/settings" class="list-group-item list-group-item-action <?php echo $isActive('/profile/settings'); ?>">
               <i class="bi bi-gear me-2"></i>Configuración
             </a>
