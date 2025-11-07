@@ -29,7 +29,7 @@ class AreaRepository implements GenericCrud
         $descripcion = $area->descripcion;
         $estado = $area->estado;
 
-        $query = "UPDATE AREA SET 
+        $query = "UPDATE AREAS SET 
                     AREA_NOMBRE=:NOMBRE, AREA_DESCRIPCION=:DESCRIPCION, AREA_ESTADO=:ESTADO 
                     WHERE AREA_CODIGO = :CODIGO";
 
@@ -72,7 +72,7 @@ class AreaRepository implements GenericCrud
 
     try {
 
-      $query = "SELECT * FROM AREA 
+      $query = "SELECT * FROM AREAS 
         WHERE AREA_ESTADO = 'ACTIVO'
         ORDER BY AREA_CODIGO ASC";
 
@@ -104,7 +104,7 @@ class AreaRepository implements GenericCrud
   {
 
     try {
-      $query = "SELECT * FROM AREA WHERE AREA_CODIGO = :CODIGO";
+      $query = "SELECT * FROM AREAS WHERE AREA_CODIGO = :CODIGO";
       $ps = $this->db->prepare($query);
       $ps->bindParam(":CODIGO", $id);
       $ps->execute();

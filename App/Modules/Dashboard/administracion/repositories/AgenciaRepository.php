@@ -21,7 +21,7 @@ class AgenciaRepository implements GenericCrud
   public function findAll(): array
   {
 
-    $query = "SELECT * FROM AGENCIA AS AGE 
+    $query = "SELECT * FROM AGENCIAS AS AGE 
                 WHERE AGE.AGE_ESTADO = 'ACTIVO' ORDER BY AGE.AGE_CODIGO ASC";
 
     try {
@@ -58,7 +58,7 @@ class AgenciaRepository implements GenericCrud
   public function findById(int $id)
   {
 
-    $query = "SELECT * FROM AGENCIA AS A 
+    $query = "SELECT * FROM AGENCIAS AS A 
                 WHERE A.AGE_ESTADO = 'ACTIVO'
                 AND A.AGE_CODIGO = :CODIGO";
 
@@ -105,7 +105,7 @@ class AgenciaRepository implements GenericCrud
         $telefono = $agency->telefono;
         $estado = $agency->estado;
 
-        $query = "UPDATE AGENCIA 
+        $query = "UPDATE AGENCIAS 
                   SET AGE_NOMBRE=:NOMBRE, AGE_DIRECCION=:DIRECCION, AGE_TELEFONO=:TELEFONO, AGE_ESTADO=:ESTADO 
                   WHERE AGE_CODIGO=:CODIGO ";
 
@@ -124,7 +124,7 @@ class AgenciaRepository implements GenericCrud
         $direccion = $agency->direccion;
         $telefono = $agency->telefono;
 
-        $query = "INSERT INTO AGENCIA(AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) 
+        $query = "INSERT INTO AGENCIAS(AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) 
                 VALUES(:NOMBRE, :DIRECCION, :TELEFONO)";
 
         $ps = $this->db->prepare($query);
