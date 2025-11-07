@@ -6,6 +6,7 @@ use App\Config\Database;
 use App\Models\Cliente;
 use PDO;
 use PDOException;
+use DateTime;
 
 class ProfileRepository
 {
@@ -125,7 +126,10 @@ class ProfileRepository
         $client = new Cliente();
         $client->setCodigo($result['CLI_CODIGO']);
         $client->setUsuarioID($result['CLI_USUARIO_ID']);
-        $client->setFechaNac(new \DateTime($result['CLI_FECHA_NAC']));
+        // validar si la fecha no es nula antes de crear el objeto DateTime
+        if ($result['CLI_FECHA_NAC'] !== null) {
+          $client->setFechaNac(new DateTime($result['CLI_FECHA_NAC']));
+        }
         $client->setPrimerNombre($result['CLI_PRIMER_NOM']);
         $client->setSegundoNombre($result['CLI_SEGUNDO_NOM']);
         $client->setPrimerApellido($result['CLI_PRIMER_APE']);
