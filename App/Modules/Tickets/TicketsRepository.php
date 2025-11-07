@@ -434,11 +434,11 @@ class TicketsRepository
               FROM TICKETS T
                   INNER JOIN ESTADO_TICKET ET
                       ON T.TKT_ESTADO_ID = ET.EST_CODIGO
-                  INNER JOIN AGENCIA AG
+                  INNER JOIN AGENCIAS AG
                       ON T.TKT_AGENCIA_ID = AG.AGE_CODIGO
                   INNER JOIN CLIENTES C
                       ON T.TKT_CLIENTE_ID = C.CLI_CODIGO
-                  LEFT JOIN AREA AR
+                  LEFT JOIN AREAS AR
                       ON T.TKT_AREA_ID = AR.AREA_CODIGO
                   LEFT JOIN ASIGNACION_TICKET AT
                       ON T.TKT_CODIGO = AT.ASIG_TKT_ID

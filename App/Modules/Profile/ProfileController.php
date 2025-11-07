@@ -56,11 +56,19 @@ class ProfileController extends Controller
       // Solo obtener tickets si el cliente existe en sesión
       $results = [];
       if (isset($_SESSION["cliente"])) {
-        $results = $this->ticketsService->getTicketsByClient($_SESSION["cliente"]->codigo);
+        $clienteID = $_SESSION["cliente"]->codigo;
+        error_log("ProfileController::index - Buscando tickets para cliente ID: {$clienteID}");
         
-        if (!$results) {
+        $results = $this->ticketsService->getTicketsByClient($clienteID);
+        
+        error_log("ProfileController::index - Tickets encontrados: " . count($results));
+        
+        if (!is_array($results)) {
+          error_log("ProfileController::index - WARNING: getTicketsByClient no devolvió un array");
           $results = [];
         }
+      } else {
+        error_log("ProfileController::index - Cliente no está en sesión");
       }
       
       $this->view("profile/profile", ["tickets" => $results]);
@@ -91,11 +99,19 @@ class ProfileController extends Controller
       // Solo obtener tickets si el cliente existe en sesión
       $results = [];
       if (isset($_SESSION["cliente"])) {
-        $results = $this->ticketsService->getTicketsByClient($_SESSION["cliente"]->codigo);
+        $clienteID = $_SESSION["cliente"]->codigo;
+        error_log("ProfileController::ticket_history - Buscando tickets para cliente ID: {$clienteID}");
         
-        if (!$results) {
+        $results = $this->ticketsService->getTicketsByClient($clienteID);
+        
+        error_log("ProfileController::ticket_history - Tickets encontrados: " . count($results));
+        
+        if (!is_array($results)) {
+          error_log("ProfileController::ticket_history - WARNING: getTicketsByClient no devolvió un array");
           $results = [];
         }
+      } else {
+        error_log("ProfileController::ticket_history - Cliente no está en sesión");
       }
       
       $this->view("profile/ticket_history", ["tickets" => $results]);
