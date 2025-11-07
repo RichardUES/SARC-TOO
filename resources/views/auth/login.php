@@ -5,60 +5,89 @@ ob_start();
 
 ?>
 
-<div class="contact-section">
+<div class="mt-5 d-flex align-items-center bg-light">
   <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-5">
+        
+        <!-- Card principal -->
+        <div class="card shadow-lg border-0">
+          
+          <!-- Header con gradiente -->
+          <div class="card-header bg-secondary text-white text-center py-4 border-0">
+            <h2 class="mb-0 fw-bold">Luz el faro</h2>
+            <p class="mb-0 mt-2 opacity-75">Hacemos que el mundo brille</p>
+          </div>
+          
+          <!-- Body del card -->
+          <div class="card-body p-4 p-md-5">
+            
+            <!-- Título -->
+            <h4 class="text-center mb-4 text-secondary fw-bold">Iniciar Sesión</h4>
+            
+            <!-- Alerta de error -->
+            <?php if (isset($_SESSION['Error'])): ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong><?= $_SESSION['Error'] ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <?php deleteSession('Error'); ?>
+              </div>
+            <?php endif; ?>
+            
+            <!-- Formulario -->
+            <form method="POST" action="/auth/signin">
+              
+              <!-- Campo usuario/email -->
+              <div class="mb-4">
+                <label for="username" class="form-label fw-semibold text-secondary">
+                  <i class="bi bi-person-fill me-2"></i>Usuario o Email
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="userOrEmail"
+                  value="<?= htmlspecialchars($old_data['username'] ?? '') ?>"
+                  required
+                  class="form-control form-control-lg border-2"
+                  placeholder="Ingresa tu usuario o correo">
+              </div>
 
-    <h1 class="display-3 text-center mt-5"><?= htmlspecialchars("Inicio de sesión") ?></h1>
+              <!-- Campo contraseña -->
+              <div class="mb-4">
+                <label for="password" class="form-label fw-semibold text-secondary">
+                  <i class="bi bi-lock-fill me-2"></i>Contraseña
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="txtPassword"
+                  value="<?= htmlspecialchars($old_data['password'] ?? '') ?>"
+                  required
+                  class="form-control form-control-lg border-2"
+                  placeholder="Ingresa tu contraseña">
+              </div>
 
-    <?php if (isset($_SESSION['Error'])): ?>
-
-      <div class="row">
-        <div class="col-4"></div>
-        <div class="alert alert-danger alert-dismissible fade show col-4">
-          <strong> <?= $_SESSION['Error'] ?> </strong>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          <?php deleteSession('Error'); ?>
+              <!-- Botón de submit -->
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                  <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar al Sistema
+                </button>
+              </div>
+              
+            </form>
+            
+          </div>
+          
+          <!-- Footer del card -->
+          <div class="card-footer bg-light text-center py-3 border-0">
+            <small class="text-muted">¿Olvidaste tu contraseña? Contacta al administrador</small>
+          </div>
+          
         </div>
-        <div class="col-4"></div>
+        
       </div>
-
-    <?php endif; ?>
-
-
-    <section class="row">
-      <div class="col-4"></div>
-      <div class="col-4">
-        <form method="POST" action="/auth/signin" class="contact-form">
-          <div class="form-group">
-            <label for="username">Correo o username:</label>
-            <input
-              type="text"
-              id="username"
-              name="userOrEmail"
-              value="<?= htmlspecialchars($old_data['username'] ?? '') ?>"
-              required
-              class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="password">Clave:</label>
-            <input
-              type="password"
-              id="password"
-              name="txtPassword"
-              value="<?= htmlspecialchars($old_data['password'] ?? '') ?>"
-              required
-              class="form-control">
-          </div>
-
-          <div class="d-grid mt-4">
-            <button type="submit" class="btn btn-lg btn-primary">Iniciar sesión</button>
-          </div>
-        </form>
-      </div>
-      <div class="col-4"></div>
-    </section>
-
+    </div>
   </div>
 </div>
 

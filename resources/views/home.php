@@ -172,9 +172,9 @@ ob_start();
 
     <div class="row g-4">
       <div class="col-lg-4">
-        <div class="testimonial-card p-4 h-100">
+        <div class="testimonial-card p-4 h-100 bg-secondary">
           <div class="d-flex align-items-center mb-3">
-            <img src="https://via.placeholder.com/60x60/B1F7FD/1F2E64?text=M"
+            <img src="https://picsum.photos/200/200?random=1"
                  alt="Cliente" class="rounded-circle me-3">
             <div>
               <h6 class="text-white mb-1">María González</h6>
@@ -196,9 +196,9 @@ ob_start();
       </div>
 
       <div class="col-lg-4">
-        <div class="testimonial-card p-4 h-100">
+        <div class="testimonial-card p-4 h-100 bg-secondary">
           <div class="d-flex align-items-center mb-3">
-            <img src="https://via.placeholder.com/60x60/B1F7FD/1F2E64?text=C"
+            <img src="https://picsum.photos/200/200?random=3"
                  alt="Cliente" class="rounded-circle me-3">
             <div>
               <h6 class="text-white mb-1">Carlos Mendoza</h6>
@@ -220,9 +220,9 @@ ob_start();
       </div>
 
       <div class="col-lg-4">
-        <div class="testimonial-card p-4 h-100">
+        <div class="testimonial-card p-4 h-100 bg-secondary">
           <div class="d-flex align-items-center mb-3">
-            <img src="https://via.placeholder.com/60x60/B1F7FD/1F2E64?text=A"
+            <img src="https://picsum.photos/200/200?random=4"
                  alt="Cliente" class="rounded-circle me-3">
             <div>
               <h6 class="text-white mb-1">Ana Rodríguez</h6>

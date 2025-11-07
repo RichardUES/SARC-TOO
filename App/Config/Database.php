@@ -46,11 +46,9 @@ class Database
 
     } catch (PDOException $exc) {
 
-      echo '<h1> Error de conexión: ' . $exc->getMessage() . '</h1>';
-      echo '<h2> En la linea: ' . $exc->getLine() . '</h2>';
-      echo '<pre>';
-      var_dump($exc->getTrace());
-      echo '</pre>';
+      echo '<h1> Error de conexión: Configure o verifique sus credenciales de conexión en el archivo .env</h1>';
+      echo '<p> <strong>NOTA:</strong> Asegurese de tener corriendo el servicio de base de datos MySQL</p>';
+      exit();
 
     }
 

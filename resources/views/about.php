@@ -187,8 +187,8 @@ ob_start();
 
       <div class="row g-4">
         <div class="col-lg-4 col-md-6">
-          <div class="team-card p-4 rounded-4 text-center h-100">
-            <img src="https://via.placeholder.com/120x120/B1F7FD/1F2E64?text=CEO"
+          <div class="team-card p-4 rounded-4 text-center h-100 bg-secondary">
+            <img src="https://picsum.photos/200/200?random=1"
                  alt="CEO" class="rounded-circle mb-3 neon-border">
             <h5 class="text-white">Ing. Roberto Martínez</h5>
             <p class="text-primary mb-3">Director General</p>
@@ -209,8 +209,8 @@ ob_start();
         </div>
 
         <div class="col-lg-4 col-md-6">
-          <div class="team-card p-4 rounded-4 text-center h-100">
-            <img src="https://via.placeholder.com/120x120/B1F7FD/1F2E64?text=CTO"
+          <div class="team-card p-4 rounded-4 text-center h-100 bg-secondary">
+            <img src="https://picsum.photos/200/200?random=2"
                  alt="CTO" class="rounded-circle mb-3 neon-border">
             <h5 class="text-white">Ing. Carmen Rodríguez</h5>
             <p class="text-primary mb-3">Directora Técnica</p>
@@ -231,8 +231,8 @@ ob_start();
         </div>
 
         <div class="col-lg-4 col-md-6">
-          <div class="team-card p-4 rounded-4 text-center h-100">
-            <img src="https://via.placeholder.com/120x120/B1F7FD/1F2E64?text=CCO"
+          <div class="team-card p-4 rounded-4 text-center h-100 bg-secondary">
+            <img src="https://picsum.photos/200/200?random=3"
                  alt="CCO" class="rounded-circle mb-3 neon-border">
             <h5 class="text-white">Lic. Miguel Herrera</h5>
             <p class="text-primary mb-3">Director Comercial</p>
