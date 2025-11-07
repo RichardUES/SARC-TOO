@@ -4,18 +4,20 @@ namespace App\Modules\Profile;
 
 use App\Core\Controller;
 use App\Models\Cliente;
-
+use App\Modules\Tickets\TicketsService;
 use DateTime;
 
 class ProfileController extends Controller
 {
 
   private ProfileService $profileService;
+  private TicketsService $ticketsService;
 
   public function __construct()
   {
 
     $this->profileService = new ProfileService();
+    $this->ticketsService = new TicketsService();
 
   }
 
@@ -26,14 +28,11 @@ class ProfileController extends Controller
     try {
 
       $isCliente = $this->profileService->getProfileByUserID($_SESSION['autorizado']->codigo);
-      // var_dump($_SESSION['autorizado']->codigo);
 
-      if (isset($isCliente)) {
-        $_SESSION["cliente"] = $isCliente;
-      }
+      if (isset($isCliente)) $_SESSION["cliente"] = $isCliente;
 
     } catch (\Throwable $th) {
-      //echo "Error al obtener el perfil del cliente: " . $th->getMessage();
+      error_log("ProfileController::profileInit - Error al obtener el perfil del usuario: " . $th->getMessage());
     }
 
   }
@@ -41,7 +40,9 @@ class ProfileController extends Controller
   public function index()
   {
     $this->profileInit();
-    $this->view("profile/profile");
+    $results = $this->ticketsService
+            ->getTicketsByClient( $_SESSION["cliente"]->codigo );
+    $this->view("profile/profile", ["tickets" => $results]);
   }
 
   public function personal_info()
@@ -59,7 +60,9 @@ class ProfileController extends Controller
   public function ticket_history()
   {
     $this->profileInit();
-    $this->view("profile/ticket_history");
+    $results = $this->ticketsService
+            ->getTicketsByClient( $_SESSION["cliente"]->codigo );
+    $this->view("profile/ticket_history", ["tickets" => $results]);
   }
 
   public function notifications()
@@ -135,6 +138,64 @@ class ProfileController extends Controller
 
     // Fallo al crear el perfil
     $_SESSION['Error'] = 'Hubo un error al actualizar el perfil. Por favor, intente de nuevo.';
+
+  }
+
+  public function update_password(): void
+  {
+    // Implementar la lógica para actualizar la contraseña del usuario
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+      session_start();
+    }
+
+    if (!$this->isPost()) {
+      $_SESSION['Error'] = 'Método no permitido.';
+      $this->redirect("/profile/settings");
+      return;
+    }
+
+    $userId = $_SESSION['autorizado']->codigo;
+    $currentPassword = $_POST['passwordActual'] ?? '';
+    $newPassword = $_POST['passwordNueva'] ?? '';
+    $confirmPassword = $_POST['passwordConfirmar'] ?? '';
+    
+    if (
+      $currentPassword === ''
+      || $newPassword === ''
+      || $confirmPassword === ''
+    ) {
+      $_SESSION['Error'] = 'Por favor, complete todos los campos obligatorios.';
+      $this->redirect("/profile/settings");
+      return;
+    }
+
+    // hay que validar que exista la contraseña actual
+    $isValidCurrentPassword = $this->profileService->validateUserPassword($userId, $currentPassword);
+    if (!$isValidCurrentPassword) {
+      $_SESSION['Error'] = 'La contraseña actual es incorrecta.';
+      $this->redirect("/profile/settings");
+      return;
+    }
+
+    if ($newPassword !== $confirmPassword) {
+      $_SESSION['Error'] = 'La nueva contraseña y la confirmación de la misma no coinciden.';
+      $this->redirect("/profile/settings");
+      return;
+    }
+
+    $passHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 6]);
+
+    $isUpdated = $this->profileService->updateUserPassword($userId, $passHash);
+
+    if ($isUpdated) {
+      $_SESSION['success'] = 'Contraseña actualizada correctamente.';
+      $this->redirect("/profile/settings");
+      return;
+    }
+    
+    $_SESSION['Error'] = 'Error al actualizar la contraseña. Por favor, intente de nuevo.';
+    $this->redirect("/profile/settings");
+    return;
 
   }
 

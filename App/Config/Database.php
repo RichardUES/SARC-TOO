@@ -33,10 +33,14 @@ class Database
       $this->con = new PDO("mysql:host=" . $_ENV["SERVER"] . ";dbname=" . $_ENV["DBNAME"], $_ENV["USER"], $_ENV["PASSWORD"]);
       $setnames = $this->con->prepare("SET NAMES 'utf8'");
       $setnames->execute();
+      
       // Configurar el modo de error para excepciones
       $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      // Deshabilitar autocommit
-      $this->con->setAttribute(PDO::ATTR_AUTOCOMMIT, false);
+      
+      // ✅ HABILITAR autocommit (comportamiento por defecto de MySQL)
+      // Esto permite que los cambios se guarden automáticamente
+      // Las transacciones explícitas seguirán funcionando cuando las necesites
+      $this->con->setAttribute(PDO::ATTR_AUTOCOMMIT, true);
 
       //echo 'conexion campeon';
 

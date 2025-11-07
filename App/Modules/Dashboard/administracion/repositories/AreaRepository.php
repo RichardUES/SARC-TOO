@@ -21,17 +21,13 @@ class AreaRepository implements GenericCrud
 
   public function save(mixed $area): bool
   {
-
     try {
-
       if (isset($area->codigo)) {
         # Actualizamos
         $id = $area->codigo;
         $nombre = $area->nombre;
         $descripcion = $area->descripcion;
         $estado = $area->estado;
-
-        $this->db->beginTransaction();
 
         $query = "UPDATE AREA SET 
                     AREA_NOMBRE=:NOMBRE, AREA_DESCRIPCION=:DESCRIPCION, AREA_ESTADO=:ESTADO 
@@ -42,14 +38,12 @@ class AreaRepository implements GenericCrud
         $ps->bindParam(":NOMBRE", $nombre);
         $ps->bindParam(":DESCRIPCION", $descripcion);
         $ps->bindParam(":ESTADO", $estado);
-
         $ps->execute();
+        
       } else {
         # Guardamos como nuevo
         $nombre = $area->nombre;
         $descripcion = $area->descripcion;
-
-        $this->db->beginTransaction();
 
         $query = "INSERT INTO AREA(AREA_NOMBRE, AREA_DESCRIPCION) 
               VALUES(:NOMBRE, :DESCRIPCION)";
@@ -57,18 +51,13 @@ class AreaRepository implements GenericCrud
         $ps = $this->db->prepare($query);
         $ps->bindParam(":NOMBRE", $nombre);
         $ps->bindParam(":DESCRIPCION", $descripcion);
-
         $ps->execute();
       }
 
-
-      $this->db->commit();
-
       return true;
+      
     } catch (PDOException $ex) {
-      // TODO: considerar LOGS
-      echo "Error al guardar area: " . $ex->getMessage();
-      $this->db->rollBack();
+      error_log("AreaRepository::save - Error: " . $ex->getMessage());
       return false;
     }
   }

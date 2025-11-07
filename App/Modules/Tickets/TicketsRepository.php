@@ -11,23 +11,54 @@ use PDO;
 use PDOException;
 use DateTime;
 
+/**
+ * Repositorio para la gestión de tickets en la base de datos.
+ * 
+ * Maneja todas las operaciones CRUD y consultas relacionadas con tickets,
+ * incluyendo la asignación de tickets a agentes y gestión de estados.
+ * 
+ * @package App\Modules\Tickets
+ */
 class TicketsRepository
 {
 
   private PDO $db;
 
+  /**
+   * Constructor del repositorio.
+   * 
+   * Inicializa la conexión a la base de datos mediante el patrón Singleton.
+   */
   public function __construct()
   {
     $this->db = Database::getIntance()->getConnection();
   }
 
+  /**
+   * Crea un nuevo ticket o actualiza uno existente en la base de datos.
+   * 
+   * Si el ticket tiene un código asignado (ID > 0), realiza un UPDATE con todos
+   * los campos del ticket. Si no tiene código, realiza un INSERT con los campos
+   * básicos y asigna el ID generado al objeto ticket.
+   * 
+   * IMPORTANTE: Este método NO maneja transacciones internamente. La transacción
+   * debe ser manejada por la capa superior (servicio).
+   * 
+   * @param Ticket $ticket Objeto ticket a crear o actualizar
+   * @return Ticket|null Retorna el ticket con su código asignado si la operación
+   *                     fue exitosa, o null si ocurrió un error
+   * 
+   * @throws PDOException Captura y registra cualquier error de base de datos
+   */
   public function createTicket(Ticket $ticket): ?Ticket
   {
 
     try {
 
-      if (isset($ticket->codigo) 
-          && $ticket->codigo > 0 ) {
+      if (
+        isset($ticket->codigo)
+        && $ticket->codigo > 0
+      ) {
 
         // Formatear fechas o asignar NULL
         $fechaAsignacion = $ticket->fecha_asignacion instanceof DateTime
@@ -109,13 +140,24 @@ class TicketsRepository
       $ticket->setCodigo($lastId);
 
       return $ticket;
-
     } catch (PDOException $ex) {
       error_log("Error al crear/actualizar ticket: " . $ex->getMessage());
       return null;
     }
   }
 
+  /**
+   * Actualiza el estado de un ticket específico.
+   * 
+   * Modifica únicamente el campo TKT_ESTADO_ID del ticket identificado por su código.
+   * Este método es útil para transiciones de estado (ej: Pendiente -> Asignado -> Cerrado).
+   * 
+   * @param int $ticketID Código único del ticket a actualizar
+   * @param int $estadoID ID del nuevo estado del ticket (ver enum TicketStatus)
+   * @return bool true si la actualización fue exitosa, false en caso contrario
+   * 
+   * @see TicketStatus Para los valores válidos de estado
+   */
   public function updateEstadoTicket(int $ticketID, int $estadoID): bool
   {
     try {
@@ -133,8 +175,18 @@ class TicketsRepository
       echo "Error al actualizar estado del ticket: " . $ex->getMessage() . "<br>";
       return false;
     }
-  } 
+  }
 
+  /**
+   * Actualiza la fecha de asignación de un ticket.
+   * 
+   * Establece la fecha y hora en que un ticket fue asignado a un agente.
+   * Útil cuando se asigna un ticket a un usuario con rol de agente.
+   * 
+   * @param int $ticketID Código único del ticket
+   * @param DateTime $fechaAsignacion Fecha y hora de la asignación
+   * @return bool true si la actualización fue exitosa, false en caso contrario
+   */
   public function updateTicketFechaAsignacion(int $ticketID, DateTime $fechaAsignacion): bool
   {
     try {
@@ -156,6 +208,16 @@ class TicketsRepository
     }
   }
 
+  /**
+   * Actualiza la fecha de cierre de un ticket.
+   * 
+   * Establece la fecha y hora en que un ticket fue cerrado o resuelto.
+   * Se utiliza típicamente cuando un agente finaliza la atención del ticket.
+   * 
+   * @param int $ticketID Código único del ticket
+   * @param DateTime $fechaCierre Fecha y hora del cierre del ticket
+   * @return bool true si la actualización fue exitosa, false en caso contrario
+   */
   public function updateTicketFechaCierre(int $ticketID, DateTime $fechaCierre): bool
   {
     try {
@@ -177,6 +239,15 @@ class TicketsRepository
     }
   }
 
+  /**
+   * Obtiene todos los tickets almacenados en la base de datos.
+   * 
+   * Recupera la lista completa de tickets y los mapea a objetos Ticket.
+   * Este método retorna todos los registros sin filtros ni paginación.
+   * 
+   * @return array Array de objetos Ticket. Retorna un array vacío si no hay tickets
+   *               o si ocurre un error en la consulta
+   */
   public function getTickets(): array
   {
 
@@ -199,7 +270,22 @@ class TicketsRepository
     }
   }
 
-
+  /**
+   * Asigna un ticket a un agente específico.
+   * 
+   * Crea un registro en la tabla ASIGNACION_TICKET vinculando un ticket con un agente.
+   * Valida que todos los campos requeridos estén presentes antes de realizar la inserción.
+   * 
+   * IMPORTANTE: Este método NO maneja transacciones. Debe ser llamado dentro de una
+   * transacción manejada por la capa de servicio para garantizar consistencia.
+   * 
+   * @param array $asignacion Array asociativo
+   * 
+   * @return bool true si la asignación fue exitosa, false si falta algún campo requerido
+   *              o si ocurre un error en la base de datos
+   * 
+   * @see TypeAssign Para los tipos válidos de asignación
+   */
   public function asignarTicket(array $asignacion): bool
   {
     // Validar datos mínimos esperados
@@ -233,7 +319,7 @@ class TicketsRepository
       $ps->bindParam(':TIPO', $typeAssign, PDO::PARAM_STR);
       $ps->bindParam(':OBSERVACION', $message, PDO::PARAM_STR);
       $ps->bindParam(':FINALIZADA', $finalizada, PDO::PARAM_STR);
-      
+
       $isInserted = $ps->execute();
 
       if (!$isInserted) {
@@ -242,17 +328,21 @@ class TicketsRepository
       }
 
       return $isInserted;
-
     } catch (PDOException $ex) {
       error_log('TicketsRepository::asignarTicket error: ' . $ex->getMessage());
-      
+
       return false;
     }
   }
 
   /**
-   * Obtenemos la lista de todos los tiuckets pendientes, para armar la bitacora
-   * @return array|null
+   * Obtiene la lista de todos los tickets pendientes para la cola de atención.
+   * 
+   * Consulta todos los tickets que están en estado PENDING (pendiente) y los retorna
+   * con información combinada de cliente, agencia, área y estado. Esta información
+   * se utiliza para construir la bitácora o cola de tickets pendientes de asignación.
+   * 
+   * @return array|null Array asociativo 
    */
   public function colaDeTickets(): ?array
   {
@@ -296,6 +386,95 @@ class TicketsRepository
     }
   }
 
+
+  /**
+   * Obtiene los tickets en proceso para un cliente específico.
+   * * Recupera todos los tickets asociados a un cliente que no estén en estado
+   * * COMPLETED, incluyendo detalles del agente asignado y tiempos transcurridos.
+   * @param int $clientID ID del cliente cuyos tickets se desean obtener
+   * @return array Array asociativo
+   */
+  public function getTicketsByClient(int $clientID): array
+  {
+    try {
+
+      $query = "SELECT
+                  -- Datos del ticket
+                  T.TKT_CODIGO AS CODIGO_TICKET,
+                  T.TKT_ASUNTO AS ASUNTO,
+                  T.TKT_DESCRIPCION AS DESCRIPCION,
+                  T.TKT_PRIORIDAD AS PRIORIDAD,
+                  T.TKT_ORIGEN AS ORIGEN,
+                  T.TKT_FECHA_CREACION AS FECHA_CREACION,
+                  T.TKT_FECHA_ASIGNACION AS FECHA_ASIGNACION,
+                  T.TKT_FECHA_CIERRE AS FECHA_CIERRE,
+
+                  -- Estado actual
+                  ET.EST_CODIGO AS CODIGO_ESTADO,
+                  ET.EST_NOMBRE AS ESTADO_ACTUAL,
+
+                  -- Datos de la agencia
+                  AG.AGE_NOMBRE AS AGENCIA,
+                  AG.AGE_DIRECCION AS DIRECCION_AGENCIA,
+                  AG.AGE_TELEFONO AS TELEFONO_AGENCIA,
+
+                  -- Área escalada (si aplica)
+                  AR.AREA_NOMBRE AS AREA_ESCALADA,
+
+                  -- Agente asignado (si existe)
+                  U.USU_USERNAME AS AGENTE_ASIGNADO,
+                  U.USU_EMAIL AS EMAIL_AGENTE,
+                  AT.ASIG_FECHA AS FECHA_ASIGNACION_AGENTE,
+                  AT.ASIG_TIPO AS TIPO_ASIGNACION,
+
+                  -- Tiempo transcurrido
+                  TIMESTAMPDIFF(DAY, T.TKT_FECHA_CREACION, NOW()) AS DIAS_DESDE_CREACION,
+                  TIMESTAMPDIFF(HOUR, T.TKT_FECHA_CREACION, NOW()) AS HORAS_DESDE_CREACION
+
+              FROM TICKETS T
+                  INNER JOIN ESTADO_TICKET ET
+                      ON T.TKT_ESTADO_ID = ET.EST_CODIGO
+                  INNER JOIN AGENCIA AG
+                      ON T.TKT_AGENCIA_ID = AG.AGE_CODIGO
+                  INNER JOIN CLIENTES C
+                      ON T.TKT_CLIENTE_ID = C.CLI_CODIGO
+                  LEFT JOIN AREA AR
+                      ON T.TKT_AREA_ID = AR.AREA_CODIGO
+                  LEFT JOIN ASIGNACION_TICKET AT
+                      ON T.TKT_CODIGO = AT.ASIG_TKT_ID
+                  LEFT JOIN USUARIOS U
+                      ON AT.ASIG_USUARIO_ID = U.USU_CODIGO
+
+              WHERE C.CLI_CODIGO = :CLIENTE_ID  
+
+              ORDER BY T.TKT_PRIORIDAD DESC, T.TKT_FECHA_CREACION ASC";
+
+      $ps = $this->db->prepare($query);
+      $ps->bindValue(':CLIENTE_ID', $clientID);
+      $ps->execute();
+
+      $tickets = $ps->fetchAll(PDO::FETCH_ASSOC);
+
+      return $tickets;
+
+    } catch (PDOException $ex) {
+      error_log("TicketsRepository::getTicketInProcessClient - Error: " . $ex->getMessage());
+      return [];
+    }
+  }
+
+
+  /**
+   * Mapea un array asociativo de datos a un objeto Ticket.
+   * 
+   * Convierte los datos crudos obtenidos de la base de datos en un objeto de dominio Ticket,
+   * estableciendo todos sus atributos incluyendo las conversiones necesarias de fechas.
+   * Este método es privado y se utiliza internamente para transformar resultados de consultas.
+   * 
+   * @param array $data Array asociativo 
+   * 
+   * @return Ticket Objeto Ticket completamente inicializado con los datos proporcionados
+   */
   private function mapToTicket(array $data): Ticket
   {
     $ticket = new Ticket();

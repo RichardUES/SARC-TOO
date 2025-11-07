@@ -27,13 +27,16 @@ class UsuarioRepository implements IUsuario
 
   /**
    * Guarda un Usuario (insert o update).
-   * Retorna el Usuario con su codigo o null en error.
+   * 
+   * Con AUTOCOMMIT habilitado, no necesita transacciones explícitas.
+   * Si se requiere atomicidad con otras operaciones, debe manejarse desde el servicio.
+   * 
+   * @param Usuario $user Usuario a guardar
+   * @return Usuario|null Retorna el Usuario con su codigo o null en error
    */
   public function save(Usuario $user): ?Usuario
   {
     try {
-      $this->db->beginTransaction();
-
       if (isset($user->codigo)) {
         // UPDATE
         $query = "UPDATE USUARIOS 
@@ -56,10 +59,7 @@ class UsuarioRepository implements IUsuario
         $ocupado = $user->ocupado;
 
         $ps = $this->db->prepare($query);
-        $ps->bindParam(
-          ":ROL_ID",
-          $rolID
-        );
+        $ps->bindParam(":ROL_ID", $rolID);
         $ps->bindParam(":AGENCIA_ID", $agenciaID);
         $ps->bindParam(":USERNAME", $username);
         $ps->bindParam(":EMAIL", $email);
@@ -69,7 +69,6 @@ class UsuarioRepository implements IUsuario
         $ps->bindParam(":CODIGO", $cod);
         $ps->execute();
 
-        $this->db->commit();
         return $user;
       }
 
@@ -94,12 +93,10 @@ class UsuarioRepository implements IUsuario
       $lastId = $this->db->lastInsertId();
       $user->setCodigo($lastId);
 
-      $this->db->commit();
       return $user;
 
     } catch (PDOException $ex) {
-      if ($this->db->inTransaction())
-        $this->db->rollBack();
+      error_log("UsuarioRepository::save - Error: " . $ex->getMessage());
       return null;
     }
   }

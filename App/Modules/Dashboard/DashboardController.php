@@ -163,15 +163,11 @@ class DashboardController extends Controller
     $isCreate = $this->areaService->save($area);
 
     if ($isCreate) {
-      $this->view(
-        $this->admin_path . "/gestion_areas",
-        ["Success" => "Area creada satisfactoriamente!"]
-      );
+      $_SESSION['Success'] = "Área creada satisfactoriamente!";
+      $this->view($this->admin_path . "/gestion_areas");
     } else {
-      $this->view(
-        $this->admin_path . "/gestion_areas",
-        ["success" => "Hubo problema al crear la agencia, consulte con el administrador de IT"]
-      );
+      $_SESSION['Error'] = "Hubo problema al crear el área, consulte con el administrador de IT";
+      $this->view($this->admin_path . "/gestion_areas");
     }
   }
 }

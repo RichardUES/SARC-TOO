@@ -153,6 +153,11 @@ class TicketsService
     return $this->ticketsRepository->colaDeTickets();
   }
 
+  public function getTicketsByClient(int $clientID): array
+  {
+    return $this->ticketsRepository->getTicketsByClient($clientID);
+  }
+
   // ==================== ================ ====================
   // ==================== MÉTODOS PRIVADOS ====================
   // ==================== ================ ====================

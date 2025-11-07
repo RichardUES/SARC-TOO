@@ -105,53 +105,39 @@ class AgenciaRepository implements GenericCrud
         $telefono = $agency->telefono;
         $estado = $agency->estado;
 
-        $this->db->beginTransaction();
-
         $query = "UPDATE AGENCIA 
                   SET AGE_NOMBRE=:NOMBRE, AGE_DIRECCION=:DIRECCION, AGE_TELEFONO=:TELEFONO, AGE_ESTADO=:ESTADO 
                   WHERE AGE_CODIGO=:CODIGO ";
 
-
         $ps = $this->db->prepare($query);
-
         $ps->bindParam(":CODIGO", $id);
         $ps->bindParam(":NOMBRE", $nombre);
         $ps->bindParam(":DIRECCION", $direccion);
         $ps->bindParam(":TELEFONO", $telefono);
         $ps->bindParam(":ESTADO", $estado);
-
         $ps->execute();
+        
       } else {
-        # Guaradmos como nuevo
+        # Guardamos como nuevo
         // Traslado las propiedades del objeto a variables
         $nombre = $agency->nombre;
         $direccion = $agency->direccion;
         $telefono = $agency->telefono;
 
-        $this->db->beginTransaction();
-
         $query = "INSERT INTO AGENCIA(AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) 
                 VALUES(:NOMBRE, :DIRECCION, :TELEFONO)";
 
-
         $ps = $this->db->prepare($query);
-
         $ps->bindParam(":NOMBRE", $nombre);
         $ps->bindParam(":DIRECCION", $direccion);
         $ps->bindParam(":TELEFONO", $telefono);
-        // $ps->bindParam(":estado", $agency->estado); // Por defecto en DB es ACTIVO
-
         $ps->execute();
       }
-
-      $this->db->commit();
 
       return true;
 
     } catch (PDOException $ex) {
-      // TODO: evaluar Logs
-      // echo $ex->getMessage();
-      $this->db->rollBack();
+      error_log("AgenciaRepository::save - Error: " . $ex->getMessage());
       return false;
     }
 

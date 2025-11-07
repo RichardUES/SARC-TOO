@@ -41,22 +41,25 @@ class AuthController extends Controller
 
   public function login(): void
   {
+    // Iniciar sesión para poder leer mensajes de error
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+    
     $this->view("auth/login");
   }
 
-  // TODO: Validar este metodo no terminado
   public function logout()
   {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+    
     unset($_SESSION['autorizado']);
-
-
-    //unset($_SESSION['ADMINISTRADOR']);
-
     session_destroy();
 
     // header('Location: ' . Parameters::BASE_URL . '/auth/login/vista');
-    $this->redirect("/home");
+    $this->redirect("/auth/login");
     exit();
   }
 
@@ -84,11 +87,15 @@ class AuthController extends Controller
 
   public function signin(): void
   {
+    // Iniciar sesión si no está activa
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
 
     if (
       isset($_POST)
-      &&  $_POST['userOrEmail']
-      &&  $_POST['txtPassword']
+      &&  isset($_POST['userOrEmail'])
+      &&  isset($_POST['txtPassword'])
     ) {
       // obtenemos el valor que nos enviaron
       $username_or_email = $_POST['userOrEmail'];
@@ -99,23 +106,19 @@ class AuthController extends Controller
       // Manejar respuestas del servicio de autenticación
       if ($usuarioLogeado === 'Sin Registros') {
         // El Usuario o email no existe
-        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+        
         $_SESSION["Error"] = "El usuario o email no existen";
         $this->redirect("/auth/login");
         return;
       }
 
       if ($usuarioLogeado === false) {
-        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
         $_SESSION["Error"] = 'La contraseña es incorrecta';
         $this->redirect("/auth/login");
         return;
       }
 
       if (is_object($usuarioLogeado)) {
-        // Iniciar sesión si no hay
-        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
-
         // Regenerar id de sesión por seguridad
         session_regenerate_id(true);
 
@@ -134,7 +137,7 @@ class AuthController extends Controller
             return;
 
           case RolType::CLIENT->value:
-            $this->redirect("/home");
+            $this->redirect("/profile");
             return;
 
           default:

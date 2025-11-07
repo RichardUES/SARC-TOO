@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+use App\Models\enums\TicketStatus;
 
 if (!isset($_SESSION["autorizado"])) header("Location: /errors/401");
 
@@ -26,7 +28,7 @@ require_once "layouts/header.php";
     <div class="card-body">
         <h3 class="card-title h5 mb-4">
             Historial de Tickets
-            <span class="float-end">
+            <!-- <span class="float-end">
                 <select class="form-select form-select-sm d-inline-block w-auto" id="filterStatus">
                     <option value="all">Todos los estados</option>
                     <option value="OPEN">Abiertos</option>
@@ -34,7 +36,7 @@ require_once "layouts/header.php";
                     <option value="RESOLVED">Resueltos</option>
                     <option value="CLOSED">Cerrados</option>
                 </select>
-            </span>
+            </span> -->
         </h3>
 
         <!-- Lista de Tickets -->
@@ -42,17 +44,44 @@ require_once "layouts/header.php";
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>#TKT</th>
                         <th>Asunto</th>
-                        <th>Área</th>
                         <th>Estado</th>
-                        <th>Prioridad</th>
-                        <th>Fecha</th>
-                        <th>Acciones</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha de cierre</th>
+                        <th>Agencia</th>
+                        <th>Tiempo de espera</th>
                     </tr>
                 </thead>
                 <tbody id="ticketsTableBody">
-                    <!-- Se llenará dinámicamente -->
+                    <?php foreach ($tickets as $ticket): ?>
+                    <tr>
+                        <td>TKT000<?= htmlspecialchars($ticket["CODIGO_TICKET"]) ?></td>
+                        <td><?= htmlspecialchars($ticket["ASUNTO"]) ?></td>
+                        <td>
+                            <span class="badge bg-<?= $ticket["ESTADO_ACTUAL"] !== TicketStatus::COMPLETED->value 
+                                    ? 'warning' 
+                                    : 'success' ?>">
+                                <?= htmlspecialchars($ticket["ESTADO_ACTUAL"]) ?>
+                            </span>
+                        </td>
+                        <td><?= htmlspecialchars(date("d/m/Y", strtotime($ticket["FECHA_CREACION"]))) ?></td>
+                        <td>
+                            <?php 
+                                if ($ticket["FECHA_CIERRE"] !== null) {
+                                    echo htmlspecialchars(date("d/m/Y", strtotime($ticket["FECHA_CIERRE"])));
+                                } else {
+                                    echo "<em>No cerrado</em>";
+                                }
+                            ?>
+                        </td>
+                        <td><?= htmlspecialchars($ticket["AGENCIA"]) ?></td>
+                        <td>
+                            <?= htmlspecialchars($ticket["DIAS_DESDE_CREACION"]) ?> días
+                            <?= htmlspecialchars($ticket["HORAS_DESDE_CREACION"]) ?> horas
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

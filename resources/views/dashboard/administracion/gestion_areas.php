@@ -11,18 +11,20 @@
     <p>Estas autorizado <?= $_SESSION["autorizado"]->username ?> </p>
   <?php endif; ?>
 
-  <?php if (isset($data['Error'])): ?>
+  <?php if (isset($_SESSION['Error'])): ?>
 
-    <div class="alert alert-danger">
-      <strong> <?= $data['Error'] ?> </strong>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong> <?= $_SESSION['Error'] ?> </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <?php deleteSession("Error"); ?>
     </div>
 
   <?php endif; ?>
 
-  <?php if (isset($data['Success'])): ?>
+  <?php if (isset($_SESSION['Success'])): ?>
 
     <div class="alert alert-success">
-      <strong> <?= $data['Success'] ?> </strong>
+      <strong> <?= $_SESSION['Success'] ?> </strong>
     </div>
 
   <?php endif; ?>

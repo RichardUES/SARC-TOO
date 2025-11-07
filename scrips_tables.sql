@@ -19,7 +19,7 @@ CREATE TABLE ROLES (
 -- =========================
 -- TABLA DE AGENCIA
 -- =========================
-CREATE TABLE AGENCIA (
+CREATE TABLE AGENCIAS (
     AGE_CODIGO INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Identificador único de la agencia',
     AGE_NOMBRE VARCHAR(150) NOT NULL COMMENT 'Nombre de la agencia o sucursal',
     AGE_DIRECCION VARCHAR(255) NULL COMMENT 'Dirección física de la agencia',
@@ -79,7 +79,7 @@ CREATE TABLE ESTADO_TICKET (
 -- =========================
 -- TABLA DE AREAS
 -- =========================
-CREATE TABLE AREA (
+CREATE TABLE AREAS (
     AREA_CODIGO INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Identificador único del área',
     AREA_NOMBRE VARCHAR(100) NOT NULL UNIQUE COMMENT 'Nombre del área (Contabilidad, Soporte, etc.)',
     AREA_DESCRIPCION VARCHAR(255) NULL COMMENT 'Descripción breve del área',
