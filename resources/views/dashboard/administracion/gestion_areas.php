@@ -24,7 +24,7 @@
   <?php if (isset($_SESSION['Success'])): ?>
 
     <div class="alert alert-success">
-      <strong> <?= $_SESSION['Success'] ?> </strong>
+      <strong> <?= $data['Success'] ?> </strong>
     </div>
 
   <?php endif; ?>

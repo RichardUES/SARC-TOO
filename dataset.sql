@@ -34,7 +34,7 @@ VALUES
 (2, 'mhernandez', 'mhernandez@mail.com', '$2y$06$ESh3xUcVnvC9bOD.u.3zQuhiXzaSroOYSxJBjRvWUpso9VAt63dP2');
 
 -- AGENCIAS
-INSERT INTO AGENCIA (AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) VALUES
+INSERT INTO AGENCIAS (AGE_NOMBRE, AGE_DIRECCION, AGE_TELEFONO) VALUES
 ('Agencia Central', 'Calle Principal #123, San Salvador', '2222-1111'),
 ('Agencia Santa Ana', 'Av. Libertad #45, Santa Ana', '2444-2222');
 
@@ -69,29 +69,7 @@ INSERT INTO ESTADO_TICKET (EST_CODIGO, EST_NOMBRE, EST_DESCRIPCION) VALUES
 (6, 'COMPLETADO', 'Ticket cerrado y resuelto');
 
 -- AREAS
-INSERT INTO AREA (AREA_NOMBRE, AREA_DESCRIPCION) VALUES
+INSERT INTO AREAS (AREA_NOMBRE, AREA_DESCRIPCION) VALUES
 ('Soporte Técnico', 'Atención a problemas técnicos'),
 ('Contabilidad', 'Casos relacionados a facturación y cobros');
 
--- TICKETS (cliente crea ticket en agencia central, origen LLAMADA)
-INSERT INTO TICKETS (TKT_CLIENTE_ID, TKT_AGENCIA_ID, TKT_AREA_ID, TKT_ESTADO_ID, TKT_ASUNTO, TKT_DESCRIPCION, TKT_ORIGEN, TKT_PRIORIDAD)
-VALUES
-(1, 1, null, 1, 'Problema con factura', 'El cliente reporta un error en el monto de la factura', 'PRESENCIAL', 'ALTA'),
-(2, 1, null, 1, 'Corte de servicio', 'El cliente no tiene acceso al servicio desde ayer', 'LLAMADA', 'MEDIA');
-
--- ASIGNACIONES (ejemplo: ticket 1 asignado a agente1)
-INSERT INTO ASIGNACION_TICKET (ASIG_TKT_ID, ASIG_USUARIO_ID, ASIG_TIPO, ASIG_OBSERVACION, ASIG_FINALIZADA)
-VALUES
-(1, 3, 'AUTOMATICA', 'Asignado automáticamente al agente1', 'N');
-
--- HISTORIAL DE TICKETS
-INSERT INTO HISTORIAL_TICKET (HIST_TKT_ID, HIST_USUARIO_ID, HIST_ESTADO_ANT, HIST_ESTADO_NUEVO, HIST_COMENTARIO)
-VALUES
-(1, 3, 1, 2, 'Ticket asignado a agente1'),
-(1, 3, 2, 3, 'Agente inició revisión del ticket');
-
--- COMENTARIOS DE TICKETS
-INSERT INTO COMENTARIO_TICKET (COM_TKT_ID, COM_USUARIO_ID, COM_MENSAJE)
-VALUES
-(1, 3, 'Estamos revisando el caso, se notificará al cliente en breve.'),
-(2, 4, 'Cliente solicita confirmación de la visita técnica.');
