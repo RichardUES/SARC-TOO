@@ -6,6 +6,7 @@ use App\Core\Controller;
 use App\Models\Cliente;
 use App\Modules\Tickets\TicketsService;
 use DateTime;
+use Exception;
 
 class ProfileController extends Controller
 {
@@ -18,31 +19,56 @@ class ProfileController extends Controller
 
     $this->profileService = new ProfileService();
     $this->ticketsService = new TicketsService();
-
   }
 
+  /**
+   * Inicializa el perfil del cliente en la sesión.
+   * 
+   * Verifica que el usuario esté autenticado y carga su perfil de cliente si existe.
+   * Si no tiene perfil aún (usuario recién registrado), simplemente no lo carga.
+   */
   private function profileInit(): void
   {
-    session_start();
+    // Iniciar sesión si no está activa
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
 
     try {
-
-      $isCliente = $this->profileService->getProfileByUserID($_SESSION['autorizado']->codigo);
-
-      if (isset($isCliente)) $_SESSION["cliente"] = $isCliente;
-
+      // Solo intentar cargar el perfil si el usuario está autenticado
+      if (isset($_SESSION['autorizado'])) {
+        $cliente = $this->profileService->getProfileByUserID($_SESSION['autorizado']->codigo);
+        
+        if ($cliente) {
+          $_SESSION["cliente"] = $cliente;
+        }
+      }
     } catch (\Throwable $th) {
       error_log("ProfileController::profileInit - Error al obtener el perfil del usuario: " . $th->getMessage());
     }
-
   }
 
   public function index()
   {
     $this->profileInit();
-    $results = $this->ticketsService
-            ->getTicketsByClient( $_SESSION["cliente"]->codigo );
-    $this->view("profile/profile", ["tickets" => $results]);
+
+    try {
+      // Solo obtener tickets si el cliente existe en sesión
+      $results = [];
+      if (isset($_SESSION["cliente"])) {
+        $results = $this->ticketsService->getTicketsByClient($_SESSION["cliente"]->codigo);
+        
+        if (!$results) {
+          $results = [];
+        }
+      }
+      
+      $this->view("profile/profile", ["tickets" => $results]);
+      
+    } catch (Exception $e) {
+      error_log("ProfileController::index - Error: " . $e->getMessage());
+      $this->view("profile/profile", ["tickets" => []]);
+    }
   }
 
   public function personal_info()
@@ -60,9 +86,24 @@ class ProfileController extends Controller
   public function ticket_history()
   {
     $this->profileInit();
-    $results = $this->ticketsService
-            ->getTicketsByClient( $_SESSION["cliente"]->codigo );
-    $this->view("profile/ticket_history", ["tickets" => $results]);
+
+    try {
+      // Solo obtener tickets si el cliente existe en sesión
+      $results = [];
+      if (isset($_SESSION["cliente"])) {
+        $results = $this->ticketsService->getTicketsByClient($_SESSION["cliente"]->codigo);
+        
+        if (!$results) {
+          $results = [];
+        }
+      }
+      
+      $this->view("profile/ticket_history", ["tickets" => $results]);
+      
+    } catch (Exception $th) {
+      error_log("ProfileController::ticket_history - Error: " . $th->getMessage());
+      $this->view("profile/ticket_history", ["tickets" => []]);
+    }
   }
 
   public function notifications()
@@ -133,12 +174,10 @@ class ProfileController extends Controller
 
       $this->redirect("/profile/personal_info");
       return;
-
     }
 
     // Fallo al crear el perfil
     $_SESSION['Error'] = 'Hubo un error al actualizar el perfil. Por favor, intente de nuevo.';
-
   }
 
   public function update_password(): void
@@ -158,7 +197,7 @@ class ProfileController extends Controller
     $currentPassword = $_POST['passwordActual'] ?? '';
     $newPassword = $_POST['passwordNueva'] ?? '';
     $confirmPassword = $_POST['passwordConfirmar'] ?? '';
-    
+
     if (
       $currentPassword === ''
       || $newPassword === ''
@@ -192,12 +231,9 @@ class ProfileController extends Controller
       $this->redirect("/profile/settings");
       return;
     }
-    
+
     $_SESSION['Error'] = 'Error al actualizar la contraseña. Por favor, intente de nuevo.';
     $this->redirect("/profile/settings");
     return;
-
   }
-
-
 }
