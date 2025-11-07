@@ -47,7 +47,7 @@
 
             <a href="/profile/notifications" class="list-group-item list-group-item-action text-secondary <?php echo $isActive('/profile/notifications'); ?>">
               <i class="bi bi-bell me-2"></i>Notificaciones
-              <span class="badge bg-danger rounded-pill float-end" id="notificationsBadge">0</span>
+              <span class="badge bg-danger rounded-pill float-end" id="notificationsBadge">1</span>
             </a>
 
             <!-- <a href="/test/testing" class="list-group-item list-group-item-action text-secundary">

@@ -97,10 +97,18 @@ require_once "layouts/header.php";
                     <?= htmlspecialchars($ticket["ASUNTO"]) ?>
                   </td>
                   <td>
-                    <span
-                      class="badge bg-<?= $ticket["ESTADO_ACTUAL"] !== TicketStatus::COMPLETED->value 
-                              ? 'warning' 
-                              : 'success' ?>">
+                    <?php
+                      $statusClass = match ($ticket['CODIGO_ESTADO']) {
+                        TicketStatus::RECEIVED->value   => 'secondary',
+                        TicketStatus::ASSIGNED->value   => 'primary text-secondary',
+                        TicketStatus::IN_PROCESS->value => 'info',
+                        TicketStatus::PENDING->value    => 'warning',
+                        TicketStatus::SCALING->value    => 'danger',
+                        TicketStatus::COMPLETED->value  => 'success',
+                        default                          => 'secondary',
+                      };
+                    ?>
+                    <span class="badge bg-<?= $statusClass ?>">
                       <?= htmlspecialchars($ticket["ESTADO_ACTUAL"]) ?>
                     </span>
                   </td>
@@ -138,7 +146,7 @@ require_once "layouts/header.php";
             </a>
             <a href="/profile/notifications" class="btn btn-outline-primary text-secondary">
               <i class="bi bi-bell me-2"></i>Notificaciones
-              <span class="badge bg-danger ms-1" id="notifQuickCount">0</span>
+              <span class="badge bg-danger ms-1" id="notifQuickCount">1</span>
             </a>
           </div>
         </div>

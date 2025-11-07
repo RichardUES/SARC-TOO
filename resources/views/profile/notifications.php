@@ -32,17 +32,40 @@ require_once "layouts/header.php";
             </button> -->
         </h3>
 
-        <!-- Lista de Notificaciones -->
-        <div class="list-group list-group-flush" id="notificationsList">
-            <!-- Se llenará dinámicamente -->
+        <!-- Lista de Notificaciones en formato horizontal -->
+        <div id="notificationsList" class="d-flex flex-column gap-3">
+            <!-- Ejemplo de item (se reemplazará dinámicamente por JS) -->
+            
+            <div class="card border-0 shadow-sm">
+              <div class="card-body py-3 border border-secondary rounded">
+                <div class="d-flex align-items-center gap-3 flex-wrap flex-md-nowrap">
+                  <div class="text-primary flex-shrink-0">
+                    <i class="bi bi-bell-fill fs-3 text-info"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start flex-column flex-md-row gap-2">
+                      <div>
+                        <h6 class="mb-1">Nueva actualización en tu ticket TKT00023</h6>
+                        <p class="mb-0 text-muted small">El agente asignado ha cambiado el estado a <span class="badge bg-warning">En Proceso</span></p>
+                      </div>
+                      <div class="text-end text-muted small">
+                        <i class="bi bi-clock me-1"></i>Hace 5 min
+                      </div>
+                    </div>
+                    <div class="mt-2 d-flex gap-2">
+                      <a href="#" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-eye me-1"></i> Ver detalle
+                      </a>
+                      <button class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-check2-all me-1"></i> Marcar como leído
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
-
-        <!-- Paginación -->
-        <nav aria-label="Navegación de notificaciones" class="mt-3">
-            <ul class="pagination pagination-sm justify-content-center" id="notificationsPagination">
-                <!-- Se llenará dinámicamente -->
-            </ul>
-        </nav>
+        
     </div>
 </div>
 
