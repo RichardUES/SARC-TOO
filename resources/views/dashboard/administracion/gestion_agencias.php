@@ -3,75 +3,126 @@
 <?php require_once VIEWS_PATH . "/dashboard/layouts/header.php" ?>
 
 
-<section class="main container">
+<!-- Gestión de Agencias Mejorada -->
+<div class=" d-flex align-items-center bg-light py-5 main">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-9 col-lg-7">
 
-  <h2>Gestión de Agencias</h2>
+        <!-- Card principal -->
+        <div class="card shadow-lg border-0">
 
-  <?php if (isset($_SESSION["autorizado"])) : ?>
-    <p>Estas autorizado <?= $_SESSION["autorizado"]->username ?> </p>
-  <?php endif; ?>
+          <!-- Header con gradiente -->
+          <div class="card-header bg-secondary text-white text-center py-4 border-0">
+            <h2 class="mb-0 fw-bold">
+              <i class="bi bi-building-fill me-2"></i>Gestión de Agencias
+            </h2>
+            <p class="mb-0 mt-2 opacity-75">Crear nuevas sucursales y oficinas</p>
+          </div>
 
-  <?php if (isset($data['Error'])): ?>
+          <!-- Body del card -->
+          <div class="card-body p-4 p-md-5">
 
-    <div class="alert alert-danger">
-      <strong> <?= $data['Error'] ?> </strong>
-    </div>
+            <!-- Usuario autorizado info -->
+            <?php if (isset($_SESSION["autorizado"])): ?>
+              <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Sesión activa:</strong> <?= $_SESSION["autorizado"]->username ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <?php endif; ?>
 
-  <?php endif; ?>
+            <!-- Alerta de error -->
+            <?php if (isset($data['Error'])): ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong><?= $data['Error'] ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <?php endif; ?>
 
-  <?php if (isset($data['Success'])): ?>
+            <!-- Alerta de éxito -->
+            <?php if (isset($data['Success'])): ?>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong><?= $data['Success'] ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <?php endif; ?>
 
-    <div class="alert alert-success">
-      <strong> <?= $data['Success'] ?> </strong>
-    </div>
+            <!-- Formulario -->
+            <form action="/dashboard/crear_agencia" method="post">
 
-  <?php endif; ?>
+              <div class="row">
+                <!-- Campo nombre -->
+                <div class="mb-4 col-md-6">
+                  <label for="nombre" class="form-label fw-semibold text-secondary">
+                    <i class="bi bi-shop-window me-2"></i>Nombre de la agencia
+                  </label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    required
+                    class="form-control form-control-lg border-2"
+                    placeholder="Ej: Agencia Central, Sucursal Norte">
+                </div>
 
-  <div class="row">
-    <div class="col-12">
+                <!-- Campo teléfono -->
+                <div class="mb-4 col-md-6">
+                  <label for="telefono" class="form-label fw-semibold text-secondary">
+                    <i class="bi bi-telephone-fill me-2"></i>Teléfono principal
+                  </label>
+                  <input
+                    type="tel"
+                    id="telefono"
+                    name="telefono"
+                    required
+                    class="form-control form-control-lg border-2"
+                    placeholder="2225-3455"
+                    pattern="[0-9]{4}-[0-9]{4}">
+                  <small class="text-muted">Formato: 0000-0000</small>
+                </div>
+              </div>
 
-      <article class="card">
-        <div class="card-header">
-          <h5 class="card-title">Crear agencia</h5>
-          <h6 class="card-subtitle text-muted">Formulario para crear agencia</h6>
+              <!-- Campo dirección -->
+              <div class="mb-4">
+                <label for="direccion" class="form-label fw-semibold text-secondary">
+                  <i class="bi bi-geo-alt-fill me-2"></i>Dirección completa
+                </label>
+                <textarea
+                  id="direccion"
+                  name="direccion"
+                  rows="3"
+                  required
+                  class="form-control form-control-lg border-2"
+                  placeholder="Av. España #223, Colonia Escalón, San Salvador"></textarea>
+              </div>
+
+              <!-- Botón de envío -->
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                  <i class="bi bi-plus-circle-fill me-2"></i>Crear Agencia
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+
+          <!-- Footer del card -->
+          <div class="card-footer bg-light text-center py-3 border-0">
+            <small class="text-muted">
+              Las agencias permiten gestionar tickets por ubicación geográfica
+            </small>
+          </div>
+
         </div>
 
-        <section class="card-body">
-
-          <form action="/dashboard/crear_agencia" method="post">
-            <div class="mb-3">
-              <label class="form-label">Nombre de Agencia</label>
-              <input type="text" name="nombre" class="form-control" placeholder="Agencia Central">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Dirección</label>
-              <input type="text" name="direccion" class="form-control" placeholder="Av. España #223">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Teléfono</label>
-              <input type="text" name="telefono" class="form-control" placeholder="22253455">
-            </div>
-
-            <!-- TODO: Poder usar check para activar o desactivar la agencioa en caso de update -->
-            <!-- <div class="mb-3">
-              <label class="form-check">
-                <input type="checkbox" class="form-check-input">
-                <span class="form-check-label">Activar/Desactivar agencia</span>
-              </label>
-            </div> -->
-
-            <button type="submit" class="btn btn-primary">Crear agencia</button>
-          </form>
-
-        </section>
-
-      </article>
-
+      </div>
     </div>
   </div>
-
-
-</section>
+</div>
 
 
 <?php require_once VIEWS_PATH . "/dashboard/layouts/sidebar.php"; ?>

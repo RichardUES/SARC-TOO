@@ -32,8 +32,27 @@ class RolRepository implements IRol
 
   public function findAll(): array
   {
-    // TODO: Implement findAll() method.
-    return [];
+    $roles = [];
+    $roles_arr = [];
+
+    try {
+
+      $query = "SELECT * FROM roles r";
+
+      $ps = $this->db->prepare($query);
+      $ps->execute();
+      $roles_arr = $ps->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($roles_arr as $rol_item) {
+        $roles[] = $this->getRol($rol_item);
+      }
+
+    }catch (PDOException $exc) {
+      echo '<h1> Error en la base: ' . $exc->getMessage() . '</h1>';
+      error_log("RolRepository::findAll - Error: " . $exc->getMessage());
+    }
+
+    return $roles;
   }
 
   /**

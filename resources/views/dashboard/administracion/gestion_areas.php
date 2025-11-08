@@ -3,72 +3,111 @@
 <?php require_once VIEWS_PATH . "/dashboard/layouts/header.php" ?>
 
 
-<article class="container main">
+<!-- Gestión de Áreas Mejorada -->
+<div class="d-flex align-items-center bg-light py-5 main">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        
+        <!-- Card principal -->
+        <div class="card shadow-lg border-0">
+          
+          <!-- Header con gradiente -->
+          <div class="card-header bg-secondary text-white text-center py-4 border-0">
+            <h2 class="mb-0 fw-bold">
+              <i class="bi bi-diagram-3-fill me-2"></i>Gestión de Áreas
+            </h2>
+            <p class="mb-0 mt-2 opacity-75">Crear nuevas áreas organizacionales</p>
+          </div>
+          
+          <!-- Body del card -->
+          <div class="card-body p-4 p-md-5">
+            
+            <!-- Usuario autorizado info -->
+            <?php if (isset($_SESSION["autorizado"])): ?>
+              <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Sesión activa:</strong> <?= $_SESSION["autorizado"]->username ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <?php endif; ?>
+            
+            <!-- Alerta de error -->
+            <?php if (isset($_SESSION['Error'])): ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong><?= $_SESSION['Error'] ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <?php deleteSession("Error"); ?>
+              </div>
+            <?php endif; ?>
 
-  <h2>Gestión de Áreas</h2>
+            <!-- Alerta de éxito -->
+            <?php if (isset($_SESSION['Success'])): ?>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong><?= $_SESSION['Success'] ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <?php deleteSession('Success'); ?>
+              </div>
+            <?php endif; ?>
+            
+            <!-- Formulario -->
+            <form action="/dashboard/crear_area" method="post">
+              
+              <!-- Campo nombre -->
+              <div class="mb-4">
+                <label for="nombre" class="form-label fw-semibold text-secondary">
+                  <i class="bi bi-tag-fill me-2"></i>Nombre del área
+                </label>
+                <input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  required
+                  class="form-control form-control-lg border-2"
+                  placeholder="Ej: Contabilidad, Recursos Humanos, IT">
+              </div>
 
-  <?php if (isset($_SESSION["autorizado"])) : ?>
-    <p>Estas autorizado <?= $_SESSION["autorizado"]->username ?> </p>
-  <?php endif; ?>
+              <!-- Campo descripción -->
+              <div class="mb-4">
+                <label for="descripcion" class="form-label fw-semibold text-secondary">
+                  <i class="bi bi-card-text me-2"></i>Descripción
+                </label>
+                <textarea
+                  id="descripcion"
+                  name="descripcion"
+                  rows="4"
+                  required
+                  class="form-control form-control-lg border-2"
+                  placeholder="Describe las funciones y responsabilidades de esta área..."></textarea>
+                <small class="text-muted">Ayuda a los usuarios a entender qué tipos de tickets dirigir a esta área</small>
+              </div>
 
-  <?php if (isset($_SESSION['Error'])): ?>
-
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <strong> <?= $_SESSION['Error'] ?> </strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      <?php deleteSession("Error"); ?>
-    </div>
-
-  <?php endif; ?>
-
-  <?php if (isset($_SESSION['Success'])): ?>
-
-    <div class="alert alert-success">
-      <strong> <?= $data['Success'] ?> </strong>
-    </div>
-
-  <?php endif; ?>
-
-  <div class="row">
-    <div class="col-12">
-
-      <article class="card">
-        <div class="card-header">
-          <h5 class="card-title">Crear Área</h5>
-          <h6 class="card-subtitle text-muted">Formulario para crear áreas</h6>
+              <!-- Botón de envío -->
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                  <i class="bi bi-plus-circle-fill me-2"></i>Crear Área
+                </button>
+              </div>
+              
+            </form>
+            
+          </div>
+          
+          <!-- Footer del card -->
+          <div class="card-footer bg-light text-center py-3 border-0">
+            <small class="text-muted">
+              Las áreas ayudan a categorizar y direccionar los tickets correctamente
+            </small>
+          </div>
+          
         </div>
-
-        <section class="card-body">
-
-          <form action="/dashboard/crear_area" method="post">
-            <div class="mb-3">
-              <label class="form-label">Nombre de área</label>
-              <input type="text" name="nombre" class="form-control" placeholder="Contabilidad">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Descripción</label>
-              <input type="text" name="descripcion" class="form-control" placeholder="Área contable">
-            </div>
-
-            <!-- TODO: Poder usar check para activar o desactivar la areas en caso de update -->
-            <!-- <div class="mb-3">
-              <label class="form-check">
-                <input type="checkbox" class="form-check-input">
-                <span class="form-check-label">Activar/Desactivar agencia</span>
-              </label>
-            </div> -->
-
-            <button type="submit" class="btn btn-primary">Crear área</button>
-          </form>
-
-        </section>
-
-      </article>
-
+        
+      </div>
     </div>
   </div>
-
-</article>
+</div>
 
 
 <?php require_once VIEWS_PATH . "/dashboard/layouts/sidebar.php"; ?>

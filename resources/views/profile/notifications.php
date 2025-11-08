@@ -39,7 +39,7 @@ require_once "layouts/header.php";
             <div class="card border-0 shadow-sm">
               <div class="card-body py-3 border border-secondary rounded">
                 <div class="d-flex align-items-center gap-3 flex-wrap flex-md-nowrap">
-                  <div class="text-primary flex-shrink-0">
+                  <div class="text-primary shrink-0">
                     <i class="bi bi-bell-fill fs-3 text-info"></i>
                   </div>
                   <div class="flex-grow-1">
