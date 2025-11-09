@@ -43,15 +43,23 @@ class DashboardController extends Controller
     $this->view('dashboard/main');
   }
 
-  // MENU PRINCIPAL
-  public function registro_usuarios()
+  // Página de bienvenida para todos los roles del dashboard
+  public function bienvenida()
   {
-    $this->view("dashboard/registro_usuarios");
+    $this->view('dashboard/bienvenida');
+  }
+
+  // MENU PRINCIPAL
+  public function registro_clientes()
+  {
+    $this->view("dashboard/registro_clientes", [
+      "agencias" => $this->agenciaService->findAll()
+    ]);
   }
 
   public function mis_tickets($id)
   {
-    //var_dump($id);
+    // var_dump($id);
     $this->view("dashboard/mis_tickets");
   }
 

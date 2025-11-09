@@ -1,6 +1,21 @@
-<?php require_once VIEWS_PATH . "/dashboard/layouts/head.php" ?>
+<?php
 
-<?php require_once VIEWS_PATH . "/dashboard/layouts/header.php" ?>
+use App\Models\enums\RolType;
+
+require_once VIEWS_PATH . "/dashboard/layouts/head.php";
+
+// Validación de acceso: Solo administradores
+if (
+  !isset($_SESSION["autorizado"]) ||
+  $_SESSION["autorizado"]->rolID !== RolType::ADMIN->value
+) {
+  header("Location: http://luzelfaro.com/errors/unauthorized");
+  exit;
+}
+
+require_once VIEWS_PATH . "/dashboard/layouts/header.php";
+
+?>
 
 
 <!-- Gestión de Áreas Mejorada -->
@@ -23,14 +38,7 @@
           <!-- Body del card -->
           <div class="card-body p-4 p-md-5">
             
-            <!-- Usuario autorizado info -->
-            <?php if (isset($_SESSION["autorizado"])): ?>
-              <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
-                <i class="bi bi-info-circle-fill me-2"></i>
-                <strong>Sesión activa:</strong> <?= $_SESSION["autorizado"]->username ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            <?php endif; ?>
+  
             
             <!-- Alerta de error -->
             <?php if (isset($_SESSION['Error'])): ?>

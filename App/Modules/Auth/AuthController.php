@@ -133,7 +133,8 @@ class AuthController extends Controller
           case RolType::ADMIN->value:
           case RolType::SUPERVISOR->value:
           case RolType::AGENT->value:
-            $this->redirect("/dashboard");
+            // Todos los roles del dashboard van a la página de bienvenida
+            $this->redirect("/dashboard/bienvenida");
             return;
 
           case RolType::CLIENT->value:

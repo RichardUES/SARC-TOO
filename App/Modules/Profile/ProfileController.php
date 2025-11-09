@@ -4,7 +4,10 @@ namespace App\Modules\Profile;
 
 use App\Core\Controller;
 use App\Models\Cliente;
+use App\Models\Usuario;
+use App\Models\enums\RolType;
 use App\Modules\Tickets\TicketsService;
+use App\Modules\Dashboard\administracion\AgenciaService;
 use DateTime;
 use Exception;
 
@@ -13,12 +16,14 @@ class ProfileController extends Controller
 
   private ProfileService $profileService;
   private TicketsService $ticketsService;
+  private AgenciaService $agenciaService;
 
   public function __construct()
   {
 
     $this->profileService = new ProfileService();
     $this->ticketsService = new TicketsService();
+    $this->agenciaService = new AgenciaService();
   }
 
   /**
@@ -250,6 +255,166 @@ class ProfileController extends Controller
 
     $_SESSION['Error'] = 'Error al actualizar la contraseña. Por favor, intente de nuevo.';
     $this->redirect("/profile/settings");
+    return;
+  }
+
+  /**
+   * Crear cliente el agente desde el dashboard
+   * Método para crear un nuevo cliente completo (Usuario + Cliente)
+   * Utiliza el stored procedure SP_REGISTRO_CLIENTE
+   */
+  public function crearCliente()
+  {
+    // Iniciar sesión si no está activa
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+
+    // Validar que sea una petición POST
+    if (!$this->isPost()) {
+      $_SESSION['Error'] = 'Método no permitido';
+      $this->redirect("/dashboard/registro_clientes");
+      return;
+    }
+
+    // Validar que el usuario esté autenticado y tenga permisos
+    if (!isset($_SESSION["autorizado"]) ||
+        !in_array($_SESSION["autorizado"]->rolID, [
+          RolType::ADMIN->value,
+          RolType::SUPERVISOR->value,
+          RolType::AGENT->value
+        ])) {
+      $_SESSION['Error'] = 'No tienes permisos para realizar esta acción';
+      $this->redirect("/dashboard/registro_clientes");
+      return;
+    }
+
+    try {
+      // Obtener y validar datos del formulario
+      $username = trim($_POST['username'] ?? '');
+      $email = trim($_POST['email'] ?? '');
+      $password = $_POST['txtPassword'] ?? '';
+      $password2 = $_POST['txtPassword2'] ?? '';
+      $agenciaID = (int)($_POST['agencia'] ?? 0);
+      $fechaNacimiento = $_POST['fecha_nacimiento'] ?? '';
+      $primerNombre = trim($_POST['primer_nombre'] ?? '');
+      $segundoNombre = trim($_POST['segundo_nombre'] ?? '');
+      $primerApellido = trim($_POST['primer_apellido'] ?? '');
+      $segundoApellido = trim($_POST['segundo_apellido'] ?? '');
+      $telefono = trim($_POST['telefono'] ?? '');
+      $dui = trim($_POST['dui'] ?? '');
+
+      // Validaciones básicas
+      $errores = [];
+
+      if (empty($username)) $errores[] = 'El nombre de usuario es obligatorio';
+      if (empty($email)) $errores[] = 'El email es obligatorio';
+      if (empty($password)) $errores[] = 'La contraseña es obligatoria';
+      if (empty($password2)) $errores[] = 'La confirmación de contraseña es obligatoria';
+      if (empty($primerNombre)) $errores[] = 'El primer nombre es obligatorio';
+      if (empty($primerApellido)) $errores[] = 'El primer apellido es obligatorio';
+      if (empty($fechaNacimiento)) $errores[] = 'La fecha de nacimiento es obligatoria';
+      if (empty($telefono)) $errores[] = 'El teléfono es obligatorio';
+      if (empty($dui)) $errores[] = 'El DUI es obligatorio';
+      if ($agenciaID <= 0) $errores[] = 'Debes seleccionar una agencia';
+
+      // Validar formato de email
+      if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errores[] = 'El formato del email no es válido';
+      }
+
+      // Validar que las contraseñas coincidan
+      if (!empty($password) && !empty($password2) && $password !== $password2) {
+        $errores[] = 'Las contraseñas no coinciden';
+      }
+
+      // Validar longitud de contraseña
+      if (!empty($password) && strlen($password) < 6) {
+        $errores[] = 'La contraseña debe tener al menos 6 caracteres';
+      }
+
+      // Validar formato de fecha
+      if (!empty($fechaNacimiento)) {
+        $fecha = DateTime::createFromFormat('Y-m-d', $fechaNacimiento);
+        if (!$fecha || $fecha->format('Y-m-d') !== $fechaNacimiento) {
+          $errores[] = 'El formato de fecha no es válido';
+        } else {
+          // Validar que no sea fecha futura
+          $hoy = new DateTime();
+          if ($fecha > $hoy) {
+            $errores[] = 'La fecha de nacimiento no puede ser futura';
+          }
+        }
+      }
+
+      // Validar formato de teléfono (El Salvador: 8 dígitos)
+      if (!empty($telefono) && !preg_match('/^\d{4}-?\d{4}$/', $telefono)) {
+        $errores[] = 'El formato del teléfono no es válido (ej: 7123-4567)';
+      }
+
+      // Validar formato de DUI (El Salvador: 8 dígitos + 1 dígito verificador)
+      if (!empty($dui) && !preg_match('/^\d{8}-?\d$/', $dui)) {
+        $errores[] = 'El formato del DUI no es válido (ej: 12345678-9)';
+      }
+
+      // Si hay errores, regresar al formulario
+      if (!empty($errores)) {
+        $_SESSION['Error'] = implode('<br>', $errores);
+        $this->redirect("/dashboard/registro_clientes");
+        return;
+      }
+
+      // Verificar que el username no exista
+      if ($this->profileService->usernameExists($username)) {
+        $_SESSION['Error'] = 'El nombre de usuario ya está en uso';
+        $this->redirect("/dashboard/registro_clientes");
+        return;
+      }
+
+      // Verificar que el email no exista
+      if ($this->profileService->emailExists($email)) {
+        $_SESSION['Error'] = 'El email ya está registrado';
+        $this->redirect("/dashboard/registro_clientes");
+        return;
+      }
+
+      // Hashear la contraseña
+      $passwordHash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 6]);
+
+      // Normalizar formato de teléfono y DUI
+      $telefonoLimpio = preg_replace('/[^0-9]/', '', $telefono);
+      $duiLimpio = preg_replace('/[^0-9]/', '', $dui);
+
+      // Llamar al stored procedure para crear el cliente completo
+      $resultado = $this->profileService->registrarClienteCompleto(
+        RolType::CLIENT->value, // U_ROL_ID
+        $username,              // U_USERNAME
+        $email,                 // U_EMAIL
+        $passwordHash,          // U_CLAVE
+        $fechaNacimiento,       // C_FECHA_NAC
+        $primerNombre,          // C_PRIMER_NOMBRE
+        $segundoNombre,         // C_SEGUNDO_NOMBRE
+        $primerApellido,        // C_PRIMER_APELLIDO
+        $segundoApellido,       // C_SEGUNDO_APELLIDO
+        $telefonoLimpio,        // C_TELEFONO
+        $duiLimpio              // C_DUI
+      );
+
+      if ($resultado) {
+        $_SESSION['Success'] = 'Cliente registrado exitosamente. Se ha creado la cuenta de usuario y el perfil del cliente.';
+        error_log("ProfileController::crearCliente - Cliente registrado exitosamente: {$username}");
+      } else {
+        $_SESSION['Error'] = 'Error al registrar el cliente. Por favor, intente de nuevo.';
+        error_log("ProfileController::crearCliente - Error al registrar cliente: {$username}");
+      }
+
+    } catch (Exception $e) {
+      $_SESSION['Error'] = 'Ocurrió un error inesperado: ' . $e->getMessage();
+      error_log("ProfileController::crearCliente - Exception: " . $e->getMessage());
+    }
+
+    // Regresar al formulario
+    $this->redirect("/dashboard/registro_clientes");
     return;
   }
 }

@@ -5,13 +5,17 @@ require_once "layouts/head.php";
 use App\Models\enums\RolType;
 
 
-if ( !isset( $_SESSION["autorizado"] )
-      && ($_SESSION["autorizado"]->rolID !== RolType::ADMIN->value
-      || $_SESSION["autorizado"]->rolID !== RolType::SUPERVISOR->value 
-      || $_SESSION["autorizado"]->rolID !== RolType::AGENT->value ) 
-    ){
-      header("Location: errors/unauthorized");
-    }
+// Validación de acceso: Solo administradores y supervisores
+if (
+  !isset($_SESSION["autorizado"]) ||
+  !in_array($_SESSION["autorizado"]->rolID, [
+    RolType::ADMIN->value,
+    RolType::SUPERVISOR->value
+  ])
+) {
+  header("Location: http://luzelfaro.com/errors/unauthorized");
+  exit;
+}
 
 
 require_once "layouts/header.php" ;

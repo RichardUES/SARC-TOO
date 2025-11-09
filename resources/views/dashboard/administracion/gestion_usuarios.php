@@ -1,6 +1,21 @@
-<?php require_once VIEWS_PATH . "/dashboard/layouts/head.php" ?>
+<?php
 
-<?php require_once VIEWS_PATH . "/dashboard/layouts/header.php" ?>
+use App\Models\enums\RolType;
+
+require_once VIEWS_PATH . "/dashboard/layouts/head.php";
+
+// Validación de acceso: Solo administradores
+if (
+  !isset($_SESSION["autorizado"]) ||
+  $_SESSION["autorizado"]->rolID !== RolType::ADMIN->value
+) {
+  header("Location: http://luzelfaro.com/errors/unauthorized");
+  exit;
+}
+
+require_once VIEWS_PATH . "/dashboard/layouts/header.php";
+
+?>
 
 
 <!-- Gestión de Usuarios Mejorada -->
