@@ -417,6 +417,109 @@ function cargarDetallesTicket(ticket) {
         console.error('Error cargando el modal:', error);
     }
 }
+
+// Funcionalidad de filtros
+document.addEventListener('DOMContentLoaded', function() {
+    const filtroEstado = document.getElementById('filtroEstado');
+    const filtroPrioridad = document.getElementById('filtroPrioridad');
+    const buscarTicket = document.getElementById('buscarTicket');
+    const limpiarFiltros = document.getElementById('limpiarFiltros');
+    
+    // Función para filtrar tabla
+    function filtrarTabla() {
+        const filas = document.querySelectorAll('#tablaTickets tbody tr');
+        const estadoFiltro = filtroEstado.value;
+        const prioridadFiltro = filtroPrioridad.value;
+        const busqueda = buscarTicket.value.toLowerCase();
+        
+        let ticketsVisibles = 0;
+        
+        filas.forEach(fila => {
+            // Saltar fila de "no hay datos"
+            if (fila.children.length === 1 && fila.children[0].colSpan > 1) {
+                return;
+            }
+            
+            const codigo = fila.children[0].textContent.toLowerCase();
+            const asunto = fila.children[1].textContent.toLowerCase();
+            const cliente = fila.children[2].textContent.toLowerCase();
+            const agencia = fila.children[3].textContent.toLowerCase();
+            const estadoSpan = fila.children[4].querySelector('.badge');
+            const prioridadSpan = fila.children[5].querySelector('.badge');
+            
+            let mostrar = true;
+            
+            // Filtro por estado
+            if (estadoFiltro && estadoSpan) {
+                const estadoTexto = estadoSpan.textContent.trim();
+                const estadoMap = {
+                    '1': 'Recibido',
+                    '2': 'Asignado', 
+                    '3': 'En Proceso',
+                    '4': 'Pendiente',
+                    '5': 'Escalado',
+                    '6': 'Completado'
+                };
+                if (estadoMap[estadoFiltro] !== estadoTexto) {
+                    mostrar = false;
+                }
+            }
+            
+            // Filtro por prioridad
+            if (prioridadFiltro && prioridadSpan) {
+                const prioridadTexto = prioridadSpan.textContent.trim();
+                const prioridadMap = {
+                    '1': 'Baja',
+                    '2': 'Media',
+                    '3': 'Alta'
+                };
+                if (prioridadMap[prioridadFiltro] !== prioridadTexto) {
+                    mostrar = false;
+                }
+            }
+            
+            // Filtro por búsqueda
+            if (busqueda && !codigo.includes(busqueda) && !asunto.includes(busqueda) && 
+                !cliente.includes(busqueda) && !agencia.includes(busqueda)) {
+                mostrar = false;
+            }
+            
+            fila.style.display = mostrar ? '' : 'none';
+            if (mostrar) ticketsVisibles++;
+        });
+        
+        // Actualizar contador
+        const contadorElement = document.getElementById('contadorTickets');
+        if (contadorElement) {
+            contadorElement.innerHTML = 
+                `<i class="bi bi-ticket-detailed me-1"></i> ${ticketsVisibles} tickets`;
+        }
+        
+        // Actualizar información de paginación
+        const ticketsInicioElement = document.getElementById('ticketsInicio');
+        const ticketsFinElement = document.getElementById('ticketsFin');
+        const ticketsTotalElement = document.getElementById('ticketsTotal');
+        
+        if (ticketsInicioElement) ticketsInicioElement.textContent = ticketsVisibles > 0 ? '1' : '0';
+        if (ticketsFinElement) ticketsFinElement.textContent = ticketsVisibles.toString();
+        if (ticketsTotalElement) ticketsTotalElement.textContent = ticketsVisibles.toString();
+    }
+    
+    // Event listeners para filtros
+    if (filtroEstado) filtroEstado.addEventListener('change', filtrarTabla);
+    if (filtroPrioridad) filtroPrioridad.addEventListener('change', filtrarTabla);
+    if (buscarTicket) buscarTicket.addEventListener('input', filtrarTabla);
+    
+    // Limpiar filtros
+    if (limpiarFiltros) {
+        limpiarFiltros.addEventListener('click', function() {
+            filtroEstado.value = '';
+            filtroPrioridad.value = '';
+            buscarTicket.value = '';
+            filtrarTabla();
+        });
+    }
+});
 </script>
 
 <?php require_once "layouts/sidebar.php"; ?>
