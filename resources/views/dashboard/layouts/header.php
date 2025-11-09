@@ -31,8 +31,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
           </span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-          <li><a class="dropdown-item" href="/profile">Perfil</a></li>
-          <li><a class="dropdown-item" href="/settings">Configuración</a></li>
+          <li><a class="dropdown-item" href="/profile"><i class="bi bi-person me-2"></i>Perfil</a></li>
+          <li><a class="dropdown-item" href="/settings"><i class="bi bi-sliders me-2"></i>Configuración</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="bi bi-box-arrow-right me-2"></i>Salir</a></li>
         </ul>
@@ -44,17 +44,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
         </a>
       </li>
     <?php endif; ?>
-
-    <!-- Settings (turca) -->
-    <li class="nav-item dropdown mx-2">
-      <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-gear fs-5"></i>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
-        <li><a class="dropdown-item" href="/settings"><i class="bi bi-sliders me-2"></i>Configuración</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="bi bi-box-arrow-right me-2"></i>Salir</a></li>
-      </ul>
-    </li>
+   
   </ul>
 </header>

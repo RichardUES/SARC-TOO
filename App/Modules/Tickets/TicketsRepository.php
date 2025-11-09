@@ -248,24 +248,73 @@ class TicketsRepository
    * @return array Array de objetos Ticket. Retorna un array vacío si no hay tickets
    *               o si ocurre un error en la consulta
    */
-  public function getTickets(): array
+  public function getAllTickets(): array
   {
 
     try {
-      $query = "SELECT * FROM TICKETS";
+      $query = "SELECT
+                  -- Datos del ticket
+                  T.TKT_CODIGO AS CODIGO_TICKET,
+                  T.TKT_ASUNTO AS ASUNTO,
+                  T.TKT_DESCRIPCION AS DESCRIPCION,
+                  T.TKT_PRIORIDAD AS PRIORIDAD,
+                  T.TKT_ORIGEN AS ORIGEN,
+                  T.TKT_FECHA_CREACION AS FECHA_CREACION,
+                  T.TKT_FECHA_ASIGNACION AS FECHA_ASIGNACION,
+
+                  -- Estado actual
+                  ET.EST_CODIGO AS CODIGO_ESTADO,
+                  ET.EST_NOMBRE AS ESTADO_ACTUAL,
+
+                  -- Datos de la agencia
+                  AG.AGE_NOMBRE AS AGENCIA,
+                  AG.AGE_DIRECCION AS DIRECCION_AGENCIA,
+                  AG.AGE_TELEFONO AS TELEFONO_AGENCIA,
+
+                  -- Datos clientes
+                  C.CLI_CODIGO,
+                  CONCAT(C.CLI_PRIMER_NOM, ' ', C.CLI_PRIMER_APE) AS NOMBRE_CLIENTE,
+                  C.CLI_TELEFONO AS TELEFONO_CLIENTE,
+
+                  -- Área escalada (si aplica)
+                  AR.AREA_NOMBRE AS AREA_ESCALADA,
+
+                  -- Agente asignado (si existe)
+                  U.USU_USERNAME AS AGENTE_ASIGNADO,
+                  U.USU_EMAIL AS EMAIL_AGENTE,
+                  AT.ASIG_FECHA AS FECHA_ASIGNACION_AGENTE,
+                  AT.ASIG_TIPO AS TIPO_ASIGNACION,
+
+                  -- Tiempo transcurrido
+                  TIMESTAMPDIFF(DAY, T.TKT_FECHA_CREACION, NOW()) AS DIAS_DESDE_CREACION,
+                  TIMESTAMPDIFF(HOUR, T.TKT_FECHA_CREACION, NOW()) AS HORAS_DESDE_CREACION
+
+              FROM TICKETS T
+                  INNER JOIN ESTADO_TICKET ET
+                      ON T.TKT_ESTADO_ID = ET.EST_CODIGO
+                  INNER JOIN AGENCIAS AG
+                      ON T.
+                        TKT_AGENCIA_ID = AG.AGE_CODIGO
+                  INNER JOIN CLIENTES C
+                      ON T.TKT_CLIENTE_ID = C.CLI_CODIGO
+                  LEFT JOIN AREAS AR
+                      ON T.TKT_AREA_ID = AR.AREA_CODIGO
+                  LEFT JOIN ASIGNACION_TICKET AT
+                      ON T.TKT_CODIGO = AT.ASIG_TKT_ID
+                  LEFT JOIN USUARIOS U
+                      ON AT.ASIG_USUARIO_ID = U.USU_CODIGO
+
+              ORDER BY T.TKT_PRIORIDAD DESC, T.TKT_FECHA_CREACION ASC";
+
       $ps = $this->db->prepare($query);
       $ps->execute();
-      $results = $ps->fetchAll(PDO::FETCH_ASSOC);
-
-      $tickets = [];
-      foreach ($results as $row) {
-        $ticket = $this->mapToTicket($row);
-        array_push($tickets, $ticket);
-      }
-
+      $tickets = $ps->fetchAll(PDO::FETCH_ASSOC);
+      
       return $tickets;
+
     } catch (PDOException $ex) {
-      echo "Error al obtener tickets: " . $ex->getMessage();
+      //echo "Error al obtener tickets: " . $ex->getMessage();
+      error_log("TicketsRepository::getTickets error: " . $ex->getMessage());
       return [];
     }
   }

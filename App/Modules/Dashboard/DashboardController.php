@@ -57,7 +57,25 @@ class DashboardController extends Controller
 
   public function tickets()
   {
-    $this->view("dashboard/consultar_tickets");
+
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+
+    try {
+      $tickets = $this->ticketsService->getAllTickets();
+
+      if ( isset($tickets) ) {
+        $_SESSION['tickets'] = $tickets;
+      }
+
+      $this->view("dashboard/consultar_tickets");
+
+    } catch (Exception $th) {
+      $_SESSION['Error'] = 'Ocurrió un error inesperado al cargar los tickets. Por favor, intente de nuevo más tarde.';
+      error_log("DashboardController::tickets - Error al obtener tickets: " . $th->getMessage());
+      $this->view("dashboard/consultar_tickets");
+    }
   }
 
   public function cola_tickets()

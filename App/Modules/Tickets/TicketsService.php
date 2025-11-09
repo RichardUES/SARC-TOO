@@ -158,6 +158,11 @@ class TicketsService
     return $this->ticketsRepository->getTicketsByClient($clientID);
   }
 
+  public function getAllTickets(): array
+  {
+    return $this->ticketsRepository->getAllTickets();
+  }
+
   // ==================== ================ ====================
   // ==================== MÉTODOS PRIVADOS ====================
   // ==================== ================ ====================
