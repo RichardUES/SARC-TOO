@@ -512,6 +512,192 @@ class TicketsRepository
     }
   }
 
+  /**
+   * Obtiene los tickets asignados a un agente específico
+   * 
+   * @param int $agenteID ID del agente
+   * @return array Lista de tickets con información completa del cliente y estado
+   */
+  public function getTicketsByAgente(int $agenteID): array
+  {
+    try {
+      $query = "SELECT 
+                  T.*,
+                  C.CLI_PRIMER_NOM,
+                  C.CLI_SEGUNDO_NOM,
+                  C.CLI_PRIMER_APE,
+                  C.CLI_SEGUNDO_APE,
+                  C.CLI_DUI,
+                  C.CLI_TELEFONO,
+                  U.USU_EMAIL AS CLIENTE_EMAIL,
+                  ET.EST_NOMBRE AS ESTADO_NOMBRE,
+                  ET.EST_DESCRIPCION AS ESTADO_DESCRIPCION,
+                  AG.AGE_NOMBRE AS AGENCIA_NOMBRE,
+                  AR.AREA_NOMBRE AS AREA_NOMBRE,
+                  ASG.ASIG_FECHA,
+                  ASG.ASIG_TIPO,
+                  ASG.ASIG_OBSERVACION
+                FROM ASIGNACION_TICKET ASG
+                INNER JOIN TICKETS T ON ASG.ASIG_TKT_ID = T.TKT_CODIGO
+                INNER JOIN CLIENTES C ON T.TKT_CLIENTE_ID = C.CLI_CODIGO
+                INNER JOIN USUARIOS U ON C.CLI_USUARIO_ID = U.USU_CODIGO
+                INNER JOIN ESTADO_TICKET ET ON T.TKT_ESTADO_ID = ET.EST_CODIGO
+                INNER JOIN AGENCIAS AG ON T.TKT_AGENCIA_ID = AG.AGE_CODIGO
+                LEFT JOIN AREAS AR ON T.TKT_AREA_ID = AR.AREA_CODIGO
+                WHERE ASG.ASIG_USUARIO_ID = :AGENTE_ID
+                  AND ET.EST_NOMBRE != 'COMPLETADO'
+                ORDER BY ASG.ASIG_FECHA ASC";
+
+      $stmt = $this->db->prepare($query);
+      $stmt->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmt->execute();
+
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $e) {
+      error_log("Error al obtener tickets del agente: " . $e->getMessage());
+      return [];
+    }
+  }
+
+  /**
+   * Completa un ticket (cambia estado y libera agente)
+   * 
+   * @param int $ticketID ID del ticket
+   * @param int $agenteID ID del agente
+   * @return bool True si la operación fue exitosa
+   */
+  public function completarTicket(int $ticketID, int $agenteID): bool
+  {
+    try {
+      $this->db->beginTransaction();
+
+      // 1. Cambiar estado del ticket a COMPLETADO
+      $queryTicket = "UPDATE TICKETS 
+                      SET TKT_ESTADO_ID = (SELECT EST_CODIGO FROM ESTADO_TICKET WHERE EST_NOMBRE = 'COMPLETADO'),
+                          TKT_FECHA_CIERRE = NOW()
+                      WHERE TKT_CODIGO = :TICKET_ID";
+      
+      $stmtTicket = $this->db->prepare($queryTicket);
+      $stmtTicket->bindParam(':TICKET_ID', $ticketID, PDO::PARAM_INT);
+      $stmtTicket->execute();
+
+      // 2. Finalizar asignación
+      $queryAsignacion = "UPDATE ASIGNACION_TICKET 
+                          SET ASIG_FINALIZADA = 'S'
+                          WHERE ASIG_TKT_ID = :TICKET_ID 
+                            AND ASIG_USUARIO_ID = :AGENTE_ID 
+                            AND ASIG_FINALIZADA = 'N'";
+      
+      $stmtAsignacion = $this->db->prepare($queryAsignacion);
+      $stmtAsignacion->bindParam(':TICKET_ID', $ticketID, PDO::PARAM_INT);
+      $stmtAsignacion->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmtAsignacion->execute();
+
+      // 3. Liberar agente
+      $queryAgente = "UPDATE USUARIOS 
+                      SET USU_OCUPADO = 'N'
+                      WHERE USU_CODIGO = :AGENTE_ID";
+      
+      $stmtAgente = $this->db->prepare($queryAgente);
+      $stmtAgente->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmtAgente->execute();
+
+      // 4. Registrar en historial
+      $queryHistorial = "INSERT INTO HISTORIAL_TICKET 
+                         (HIST_TKT_ID, HIST_USUARIO_ID, HIST_ESTADO_ANT, HIST_ESTADO_NUEVO, HIST_COMENTARIO)
+                         VALUES (:TICKET_ID, :AGENTE_ID, 
+                                (SELECT TKT_ESTADO_ID FROM TICKETS WHERE TKT_CODIGO = :TICKET_ID2), 
+                                (SELECT EST_CODIGO FROM ESTADO_TICKET WHERE EST_NOMBRE = 'COMPLETADO'),
+                                'Ticket completado por el agente')";
+      
+      $stmtHistorial = $this->db->prepare($queryHistorial);
+      $stmtHistorial->bindParam(':TICKET_ID', $ticketID, PDO::PARAM_INT);
+      $stmtHistorial->bindParam(':TICKET_ID2', $ticketID, PDO::PARAM_INT);
+      $stmtHistorial->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmtHistorial->execute();
+
+      $this->db->commit();
+      return true;
+
+    } catch (PDOException $e) {
+      $this->db->rollBack();
+      error_log("Error al completar ticket: " . $e->getMessage());
+      return false;
+    }
+  }
+
+  /**
+   * Escala un ticket a un área específica (cambia estado y libera agente)
+   * 
+   * @param int $ticketID ID del ticket
+   * @param int $agenteID ID del agente
+   * @param int $areaID ID del área a escalar
+   * @param string $motivo Motivo del escalamiento
+   * @return bool True si la operación fue exitosa
+   */
+  public function escalarTicket(int $ticketID, int $agenteID, int $areaID, string $motivo): bool
+  {
+    try {
+      $this->db->beginTransaction();
+
+      // 1. Actualizar ticket con área y estado ESCALADO
+      $queryTicket = "UPDATE TICKETS 
+                      SET TKT_AREA_ID = :AREA_ID,
+                          TKT_ESTADO_ID = (SELECT EST_CODIGO FROM ESTADO_TICKET WHERE EST_NOMBRE = 'ESCALADO')
+                      WHERE TKT_CODIGO = :TICKET_ID";
+      
+      $stmtTicket = $this->db->prepare($queryTicket);
+      $stmtTicket->bindParam(':AREA_ID', $areaID, PDO::PARAM_INT);
+      $stmtTicket->bindParam(':TICKET_ID', $ticketID, PDO::PARAM_INT);
+      $stmtTicket->execute();
+
+      // 2. Finalizar asignación actual
+      $queryAsignacion = "UPDATE ASIGNACION_TICKET 
+                          SET ASIG_FINALIZADA = 'S'
+                          WHERE ASIG_TKT_ID = :TICKET_ID 
+                            AND ASIG_USUARIO_ID = :AGENTE_ID 
+                            AND ASIG_FINALIZADA = 'N'";
+      
+      $stmtAsignacion = $this->db->prepare($queryAsignacion);
+      $stmtAsignacion->bindParam(':TICKET_ID', $ticketID, PDO::PARAM_INT);
+      $stmtAsignacion->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmtAsignacion->execute();
+
+      // 3. Liberar agente
+      $queryAgente = "UPDATE USUARIOS 
+                      SET USU_OCUPADO = 'N'
+                      WHERE USU_CODIGO = :AGENTE_ID";
+      
+      $stmtAgente = $this->db->prepare($queryAgente);
+      $stmtAgente->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmtAgente->execute();
+
+      // 4. Registrar en historial
+      $queryHistorial = "INSERT INTO HISTORIAL_TICKET 
+                         (HIST_TKT_ID, HIST_USUARIO_ID, HIST_ESTADO_ANT, HIST_ESTADO_NUEVO, HIST_COMENTARIO)
+                         VALUES (:TICKET_ID, :AGENTE_ID, 
+                                (SELECT TKT_ESTADO_ID FROM TICKETS WHERE TKT_CODIGO = :TICKET_ID2), 
+                                (SELECT EST_CODIGO FROM ESTADO_TICKET WHERE EST_NOMBRE = 'ESCALADO'),
+                                :MOTIVO)";
+      
+      $stmtHistorial = $this->db->prepare($queryHistorial);
+      $stmtHistorial->bindParam(':TICKET_ID', $ticketID, PDO::PARAM_INT);
+      $stmtHistorial->bindParam(':TICKET_ID2', $ticketID, PDO::PARAM_INT);
+      $stmtHistorial->bindParam(':AGENTE_ID', $agenteID, PDO::PARAM_INT);
+      $stmtHistorial->bindParam(':MOTIVO', $motivo, PDO::PARAM_STR);
+      $stmtHistorial->execute();
+
+      $this->db->commit();
+      return true;
+
+    } catch (PDOException $e) {
+      $this->db->rollBack();
+      error_log("Error al escalar ticket: " . $e->getMessage());
+      return false;
+    }
+  }
+
 
   /**
    * Mapea un array asociativo de datos a un objeto Ticket.

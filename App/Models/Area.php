@@ -10,7 +10,7 @@ class Area
   private int $codigo;
   private string $nombre;
   private string $descripcion;
-  private Status $estado;
+  private string $estado;
 
   public function __construct() { }
 
@@ -33,7 +33,7 @@ class Area
     $this->descripcion = $descripcion;
   }
 
-  public function setEstado(Status $estado): void
+  public function setEstado(string $estado): void
   {
     $this->estado = $estado;
   }

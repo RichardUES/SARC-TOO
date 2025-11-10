@@ -197,7 +197,7 @@ $saludo = match(true) {
               </div>
               <h5 class="card-title">Mis Tickets</h5>
               <p class="card-text text-muted small">Tickets asignados a mí</p>
-              <a href="/dashboard/mis_tickets/<?= $usuario->id ?>" class="btn btn-outline-success btn-sm">
+              <a href="/dashboard/mis_tickets/<?= $usuario->codigo ?>" class="btn btn-outline-success btn-sm">
                 <i class="bi bi-arrow-right me-1"></i>Acceder
               </a>
             </div>

@@ -350,8 +350,16 @@ class UsuarioRepository implements IUsuario
     $usuario_obj->setUsername($usuario['USU_USERNAME']);
     $usuario_obj->setEmail($usuario['USU_EMAIL']);
     $usuario_obj->setClave($usuario['USU_CLAVE']);
-    $usuario_obj->setFechaRegistro($usuario['USU_FECHA_REGISTRO']);
-    $usuario_obj->setFum($usuario['USU_FUM']);
+    
+    // Convertir fechas string a DateTime si no están vacías
+    if (!empty($usuario['USU_FECHA_REGISTRO'])) {
+      $usuario_obj->setFechaRegistro(new DateTime($usuario['USU_FECHA_REGISTRO']));
+    }
+    
+    if (!empty($usuario['USU_FUM'])) {
+      $usuario_obj->setFum(new DateTime($usuario['USU_FUM']));
+    }
+    
     $usuario_obj->setEstado($usuario['USU_ESTADO']);
     $usuario_obj->setOcupado($usuario['USU_OCUPADO']);
 

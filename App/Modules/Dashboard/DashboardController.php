@@ -57,10 +57,39 @@ class DashboardController extends Controller
     ]);
   }
 
-  public function mis_tickets($id)
+  public function mis_tickets()
   {
-    // var_dump($id);
-    $this->view("dashboard/mis_tickets");
+    session_start();
+    
+    try {
+      // Obtener el ID del agente desde la sesión
+      $agenteID = $_SESSION["autorizado"]->codigo ?? 0;
+      
+      if ($agenteID <= 0) {
+        $_SESSION["Error"] = "Sesión inválida";
+        $this->redirect("/auth/login");
+        return;
+      }
+
+      // Obtener tickets del agente
+      $misTickets = $this->ticketsService->getTicketsByAgente($agenteID);
+      
+      // Obtener áreas para el escalamiento
+      $areas = $this->areaService->findAll();
+
+      $this->view("dashboard/mis_tickets", [
+        "tickets" => $misTickets,
+        "areas" => $areas
+      ]);
+
+    } catch (Exception $e) {
+      error_log("DashboardController::mis_tickets - Error: " . $e->getMessage());
+      $_SESSION["Error"] = "Error al cargar los tickets";
+      $this->view("dashboard/mis_tickets", [
+        "tickets" => [],
+        "areas" => []
+      ]);
+    }
   }
 
   public function tickets()

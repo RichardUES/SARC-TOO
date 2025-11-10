@@ -84,10 +84,10 @@ class AreaRepository implements GenericCrud
       foreach ($areas as $key => $value) {
         $area = new Area();
 
-        $area->setCodigo($value["AGE_CODIGO"]);
-        $area->setNombre($value["AGE_NOMBRE"]);
-        $area->setDescripcion($value["AGE_DESCRIPCION"]);
-        $area->setEstado($value["AGE_ESTADO"]);
+        $area->setCodigo($value["AREA_CODIGO"]);
+        $area->setNombre($value["AREA_NOMBRE"]);
+        $area->setDescripcion($value["AREA_DESCRIPCION"]);
+        $area->setEstado($value["AREA_ESTADO"]);
 
         array_push($areas_list, $area);
       }
@@ -112,10 +112,10 @@ class AreaRepository implements GenericCrud
 
       $area = new Area();
       foreach ($area_arr as $key => $value) {
-        $area->setCodigo($value["AGE_CODIGO"]);
-        $area->setNombre($value["AGE_NOMBRE"]);
-        $area->setDescripcion($value["AGE_DESCRIPCION"]);
-        $area->setEstado($value["AGE_ESTADO"]);
+        $area->setCodigo($value["AREA_CODIGO"]);
+        $area->setNombre($value["AREA_NOMBRE"]);
+        $area->setDescripcion($value["AREA_DESCRIPCION"]);
+        $area->setEstado($value["AREA_ESTADO"]);
       }
       return $area;
       
