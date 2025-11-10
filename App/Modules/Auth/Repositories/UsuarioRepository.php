@@ -263,6 +263,40 @@ class UsuarioRepository implements IUsuario
   }
 
   /**
+   * Obtener lista completa de agentes activos para reportes
+   * @return array Lista de agentes con información básica
+   */
+  public function obtenerListaAgentes(): array
+  {
+    try {
+      $rolType = RolType::AGENT->value;
+
+      $query = "SELECT 
+                  USU_CODIGO,
+                  USU_USERNAME,
+                  USU_EMAIL,
+                  USU_AGENCIA_ID,
+                  USU_ESTADO,
+                  USU_OCUPADO,
+                  USU_FECHA_REGISTRO
+                FROM USUARIOS
+                WHERE USU_ESTADO = 'ACTIVO'
+                  AND USU_ROL_ID = :ROL_ID
+                ORDER BY USU_USERNAME ASC";
+
+      $ps = $this->db->prepare($query);
+      $ps->bindValue(':ROL_ID', $rolType, PDO::PARAM_INT);
+      $ps->execute();
+      
+      return $ps->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $ex) {
+      error_log("Error al obtener lista de agentes: " . $ex->getMessage());
+      return [];
+    }
+  }
+
+  /**
    * Obtener el primer agente disponible (no ocupado)
    * @return array|null Devuelve el array del agente disponible o null si no hay ninguno
    */

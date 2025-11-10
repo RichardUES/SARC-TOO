@@ -33,4 +33,20 @@ class UsuarioService implements IUsuario
     return null;
   }
 
+  /**
+   * Obtiene lista completa de agentes activos
+   * @return array Lista de agentes para reportes y administración
+   */
+  public function getAgentesList(): array {
+    return $this->userRepository->obtenerListaAgentes();
+  }
+
+  /**
+   * Obtiene un agente disponible para asignación de tickets
+   * @return array|null Agente disponible o null si no hay ninguno
+   */
+  public function obtenerAgenteDisponible(): ?array {
+    return $this->userRepository->obtenerAgenteDisponible();
+  }
+
 }

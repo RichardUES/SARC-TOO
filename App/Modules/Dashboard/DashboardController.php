@@ -94,7 +94,7 @@ class DashboardController extends Controller
 
   public function reporteria()
   {
-    $this->view("dashboard/generar_reportes");
+    $this->view("reports/generar_reportes");
   }
 
   // ROUTER DE ADMINISTRACIÓN
