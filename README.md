@@ -274,7 +274,12 @@ Si encuentras problemas durante la instalación o uso del sistema:
 
 ## 🏆 Créditos
 
-**Desarrollado por**: [Tu Nombre]  
+**Equipo de Desarrollo**:
+- 👨‍💻 **Mario Ricardo Pineda** - Desarrollador Principal
+- 👨‍💻 **Alfredo Vidal** - Desarrollador
+- 👨‍💻 **Josué Monterrosa** - Desarrollador  
+- 👨‍💻 **Anderson Velazques** - Desarrollador
+
 **Versión**: 1.0.0  
 **Licencia**: MIT  
 
